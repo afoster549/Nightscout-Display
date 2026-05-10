@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -43,26 +42,16 @@ class UpdateLoop implements Runnable {
             }
 
             HttpURLConnection connection = null;
-
-            try {
-                connection = (HttpURLConnection) url.openConnection();
-            } catch (IOException error) {
-                error.printStackTrace();
-            }
-
-            try {
-                connection.setRequestMethod("GET");
-            } catch (ProtocolException error) {
-                error.printStackTrace();
-            }
-
-            connection.setRequestProperty("accept", "application/json");
-            connection.setRequestProperty("API-SECRET", sha1.hash(settingsList.get("apiSecret")));
-
             int responseCode = 0;
 
             try {
-                responseCode = connection.getResponseCode();
+                if (url != null) {
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    connection.setRequestProperty("accept", "application/json");
+                    connection.setRequestProperty("API-SECRET", sha1.hash(settingsList.get("apiSecret")));
+                    responseCode = connection.getResponseCode();
+                }
             } catch (IOException error) {
                 error.printStackTrace();
             }
