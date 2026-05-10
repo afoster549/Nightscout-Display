@@ -5,13 +5,17 @@ import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import javax.swing.JWindow;
+import java.net.URL;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 class window {
     static Settings settings = new Settings();
@@ -21,12 +25,29 @@ class window {
 
         BgWindow bgWindowClass = new BgWindow(settingsList);
 
-        JWindow bgWindow = bgWindowClass.create();
+        JFrame bgWindow = bgWindowClass.create();
 
         Settingswindow settingsWindowClass = new Settingswindow(settingsList, bgWindow);
 
         SystemTray systemTray = SystemTray.getSystemTray();
-        Image trayImage = Toolkit.getDefaultToolkit().getImage("./image/nsico.png");
+
+        URL iconUrl = window.class.getResource("images/nsicon.png");
+        Image trayImage = null;
+        
+        try {
+            if (iconUrl != null) {
+                trayImage = ImageIO.read(iconUrl);
+            } else {
+                File imgFile = new File("./src/images/nsicon.png");
+                if (!imgFile.exists()) imgFile = new File("./images/nsicon.png");
+                
+                if (imgFile.exists()) trayImage = ImageIO.read(imgFile);
+            }
+        } catch (IOException e) {}
+        
+        if (trayImage == null) {
+            trayImage = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+        }
 
         PopupMenu popupMenu = new PopupMenu();
         MenuItem settingsItem = new MenuItem("Settings");
