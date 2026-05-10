@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.util.Map;
 
 import javax.swing.JLabel;
-import javax.swing.JWindow;
+import javax.swing.JFrame;
 
 class BgWindow {
     private Map<String, String> settingsList;
@@ -15,12 +15,15 @@ class BgWindow {
         this.settingsList = settingsList;
     }
 
-    public JWindow create() {
-        JWindow window = new JWindow();
+    public JFrame create() {
+        JFrame window = new JFrame();
+        window.setUndecorated(true);
         window.setPreferredSize(new Dimension(100, 50));
 
         window.setAlwaysOnTop(true);
+        window.setFocusableWindowState(false);
         window.setFocusable(false);
+        window.setType(java.awt.Window.Type.UTILITY);
         
         window.setBackground(new Color(0, true));
         
