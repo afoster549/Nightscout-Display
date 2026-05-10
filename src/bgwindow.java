@@ -40,7 +40,8 @@ class BgWindow {
         
         UpdateLoop updateLoop = new UpdateLoop(bgLabel, settingsList);
 
-        new Thread(updateLoop).start();
+        Main.updateThread = new Thread(updateLoop);
+        Main.updateThread.start();
 
         return window;
     }

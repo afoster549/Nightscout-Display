@@ -9,6 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +73,8 @@ class UpdateLoop implements Runnable {
                 put("NONE", "⇼");
             }};
 
+        String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 BufferedReader input = null;
 
@@ -122,17 +126,41 @@ class UpdateLoop implements Runnable {
                 } catch (IOException error) {
                     error.printStackTrace();
                 }
+            
+            Main.currentStatusText = "Status: OK (" + time + ")";
+            Main.currentStatusColor = Color.GREEN;
+            
+            if (Main.statusLabel != null) {
+                Main.statusLabel.setText(Main.currentStatusText);
+                Main.statusLabel.setForeground(Main.currentStatusColor);
+            }
+
+            if (Main.trayIcon != null) {
+                Main.trayIcon.setToolTip("Nightscout: OK | BG: " + df.format(bg) + " " + directions.get(direction) + " | Updated: " + time);
+            }
             } else {
                 bgLabel.setText("Err");
                 bgLabel.setForeground(Color.RED);
+            
+            Main.currentStatusText = "Status: Error (" + responseCode + ")";
+            Main.currentStatusColor = Color.RED;
+            
+            if (Main.statusLabel != null) {
+                Main.statusLabel.setText(Main.currentStatusText);
+                Main.statusLabel.setForeground(Main.currentStatusColor);
+            }
+
+            if (Main.trayIcon != null) {
+                Main.trayIcon.setToolTip("Nightscout: Error (" + responseCode + ") | Last attempt: " + time);
+            }
             }
 
             try {
                 Thread.sleep(Integer.valueOf(settingsList.get("checkInterval")) * 60000);
             } catch (NumberFormatException error) {
                 error.printStackTrace();
-            } catch (InterruptedException error) {
-                error.printStackTrace();
+            } catch (InterruptedException e) {
+                // Thread interrupted to force an immediate update check
             }
         }
     }

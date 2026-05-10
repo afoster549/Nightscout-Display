@@ -1,6 +1,7 @@
 package src;
 
 import java.awt.AWTException;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -16,22 +17,23 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
-class window {
+class Main {
     static Settings settings = new Settings();
+    static TrayIcon trayIcon;
+    static JLabel statusLabel;
+    static String currentStatusText = "Status: Connecting...";
+    static Color currentStatusColor = Color.WHITE;
+    static Thread updateThread;
 
     public static void main(String[] args) throws InterruptedException, IOException {
         Map<String, String> settingsList = settings.read();
 
-        BgWindow bgWindowClass = new BgWindow(settingsList);
-
-        JFrame bgWindow = bgWindowClass.create();
-
-        Settingswindow settingsWindowClass = new Settingswindow(settingsList, bgWindow);
 
         SystemTray systemTray = SystemTray.getSystemTray();
 
-        URL iconUrl = window.class.getResource("images/nsicon.png");
+        URL iconUrl = Main.class.getResource("images/nsicon.png");
         Image trayImage = null;
         
         try {
@@ -51,6 +53,14 @@ class window {
 
         PopupMenu popupMenu = new PopupMenu();
         MenuItem settingsItem = new MenuItem("Settings");
+
+        trayIcon = new TrayIcon(trayImage, "Nightscout Display: Connecting...", popupMenu);
+        trayIcon.setImageAutoSize(true);
+
+        BgWindow bgWindowClass = new BgWindow(settingsList);
+        JFrame bgWindow = bgWindowClass.create();
+
+        Settingswindow settingsWindowClass = new Settingswindow(settingsList, bgWindow);
 
         settingsItem.addActionListener(new ActionListener() {
             @Override
@@ -72,11 +82,6 @@ class window {
 
         popupMenu.add(settingsItem);
         popupMenu.add(exitItem);
-
-        TrayIcon trayIcon = new TrayIcon(trayImage, "Nightscout Display", popupMenu);
-        trayIcon.setImageAutoSize(true);
-
-        trayIcon.setPopupMenu(popupMenu);
 
         try {
             systemTray.add(trayIcon);

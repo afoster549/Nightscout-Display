@@ -93,6 +93,13 @@ class Settingswindow {
 
         frame.getContentPane().add(title);
 
+        Main.statusLabel = new JLabel(Main.currentStatusText);
+        Main.statusLabel.setBackground(new Color(17, 17, 17));
+        Main.statusLabel.setForeground(Main.currentStatusColor);
+        Main.statusLabel.setFont(new Font("Ubuntu", Font.PLAIN, 14));
+        Main.statusLabel.setBounds(240, 10, 150, 20);
+        frame.getContentPane().add(Main.statusLabel);
+
         JLabel errorMessage = new JLabel("");
         errorMessage.setBackground(new Color(17, 17, 17));
         errorMessage.setForeground(Color.RED);
@@ -340,6 +347,10 @@ class Settingswindow {
 
         saveSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
+                boolean forceCheck = !settingsList.get("nsurl").equals(nsurlFeild.getText()) || 
+                                     !settingsList.get("apiSecret").equals(apiSecretFeild.getText()) ||
+                                     !settingsList.get("checkInterval").equals(checkInterval.getText());
+
                 settingsList.put("veryHighBg", veryHighBgFeild.getText());
                 settingsList.put("highBg", highBgFeild.getText());
                 settingsList.put("lowBg", lowBgFeild.getText());
@@ -354,9 +365,14 @@ class Settingswindow {
                 Settings settings = new Settings();
 
                 if (settings.write(settingsList)) {
+                    Main.statusLabel = null;
                     frame.dispose();
 
                     open = false;
+
+                    if (forceCheck && Main.updateThread != null) {
+                        Main.updateThread.interrupt();
+                    }
                 } else {
                     errorMessage.setText("Failed to save settings.");
                 };
@@ -380,6 +396,7 @@ class Settingswindow {
                 bgWindow.setBackground(new Color(0, true));
                 bgWindow.setLocation(Integer.valueOf(settingsList.get("winx")), Integer.valueOf(settingsList.get("winy")));
 
+                Main.statusLabel = null;
                 frame.dispose();
 
                 open = false;
