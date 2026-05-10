@@ -1,3 +1,4 @@
+package src;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -49,8 +50,8 @@ class Settingswindow {
 
         JFrame frame = new JFrame();
 
-        ImageIcon imgIcon = new ImageIcon("./img/nsico.png");
-        frame.setIconImage(imgIcon.getImage());
+        ImageIcon imageIcon = new ImageIcon("./image/nsico.png");
+        frame.setIconImage(imageIcon.getImage());
         frame.setPreferredSize(new Dimension(400, 260));
 
         int x = ((dim.width - frame.getSize().width) / 2) - 200;

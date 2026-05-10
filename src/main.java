@@ -1,3 +1,4 @@
+package src;
 
 import java.awt.AWTException;
 import java.awt.Image;
@@ -25,7 +26,7 @@ class window {
         Settingswindow settingsWindowClass = new Settingswindow(settingsList, bgWindow);
 
         SystemTray systemTray = SystemTray.getSystemTray();
-        Image trayImage = Toolkit.getDefaultToolkit().getImage("./img/nsico.png");
+        Image trayImage = Toolkit.getDefaultToolkit().getImage("./image/nsico.png");
 
         PopupMenu popupMenu = new PopupMenu();
         MenuItem settingsItem = new MenuItem("Settings");
