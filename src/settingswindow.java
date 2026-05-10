@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -124,6 +126,14 @@ class Settingswindow {
         
         JTextField veryHighBgFeild = textFeildFactory.create("Very High BG", 10, 160, 150, 20);
         veryHighBgFeild.setText(settingsList.get("veryHighBg"));
+        veryHighBgFeild.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume();
+                }
+            }
+        });
         frame.getContentPane().add(veryHighBgFeild);
 
         JLabel highBgLabel = new JLabel("High BG");
@@ -133,6 +143,14 @@ class Settingswindow {
         
         JTextField highBgFeild = textFeildFactory.create("High BG", 10, 210, 150, 20);
         highBgFeild.setText(settingsList.get("highBg"));
+        highBgFeild.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume();
+                }
+            }
+        });
         frame.getContentPane().add(highBgFeild);
 
         JLabel lowBgLabel = new JLabel("Low BG");
@@ -142,6 +160,14 @@ class Settingswindow {
         
         JTextField lowBgFeild = textFeildFactory.create("Low BG", 10, 260, 150, 20);
         lowBgFeild.setText(settingsList.get("lowBg"));
+        lowBgFeild.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume();
+                }
+            }
+        });
         frame.getContentPane().add(lowBgFeild);
 
         JLabel veryLowBgLabel = new JLabel("Very Low BG");
@@ -151,6 +177,14 @@ class Settingswindow {
         
         JTextField veryLowBgFeild = textFeildFactory.create("Very Low BG", 10, 310, 150, 20);
         veryLowBgFeild.setText(settingsList.get("veryLowBg"));
+        veryLowBgFeild.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume();
+                }
+            }
+        });
         frame.getContentPane().add(veryLowBgFeild);
 
         JLabel checkIntervalLabel = new JLabel("Check Interval (mins)");
@@ -160,6 +194,13 @@ class Settingswindow {
         
         JTextField checkInterval = textFeildFactory.create("Check Interval (mins)", 240, 110, 150, 20);
         checkInterval.setText(settingsList.get("checkInterval"));
+        checkInterval.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                if (!Character.isDigit(e.getKeyChar())) {
+                    e.consume();
+                }
+            }
+        });
         frame.getContentPane().add(checkInterval);
 
         JLabel bgPositionLabel = new JLabel("BG Position");
@@ -203,6 +244,14 @@ class Settingswindow {
         
         JTextField bgWinX = textFeildFactory.create("BG Window X", 240, 210, 150, 20);
         bgWinX.setText(settingsList.get("winx"));
+        bgWinX.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '-') {
+                    e.consume();
+                }
+            }
+        });
         frame.getContentPane().add(bgWinX);
 
         JLabel bgWinYLabel = new JLabel("BG Window Y");
@@ -212,6 +261,14 @@ class Settingswindow {
         
         JTextField bgWinY = textFeildFactory.create("BG Window Y", 240, 260, 150, 20);
         bgWinY.setText(settingsList.get("winy"));
+        bgWinY.addKeyListener(new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '-') {
+                    e.consume();
+                }
+            }
+        });
         frame.getContentPane().add(bgWinY);
 
         bgWindow.addMouseListener(new MouseAdapter() {
