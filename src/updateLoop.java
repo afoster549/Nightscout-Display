@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -35,9 +37,9 @@ class UpdateLoop implements Runnable {
             URL url = null;
 
             try {
-                url = new URL("https://" + settingsList.get("nsurl") + "/api/v1/entries.json?count=1");
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+                url = new URI("http://" + settingsList.get("nsurl") + "/api/v1/entries.json?count=1").toURL();
+            } catch (MalformedURLException | URISyntaxException error) {
+                error.printStackTrace();
             }
 
             HttpURLConnection connection = null;
@@ -61,8 +63,8 @@ class UpdateLoop implements Runnable {
 
             try {
                 responseCode = connection.getResponseCode();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException error) {
+                error.printStackTrace();
             }
 
             Map<String, String> directions = new HashMap<String, String>() {{
@@ -85,16 +87,16 @@ class UpdateLoop implements Runnable {
 
                 try {
                     input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException error) {
+                    error.printStackTrace();
                 }
 
                 String[] response = null;
 
                 try {
                     response = input.readLine().split(",");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException error) {
+                    error.printStackTrace();
                 }
                 
                 double bg = 0;
@@ -128,8 +130,8 @@ class UpdateLoop implements Runnable {
 
                 try {
                     input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException error) {
+                    error.printStackTrace();
                 }
             } else {
                 bgLabel.setText("Err");
@@ -138,10 +140,10 @@ class UpdateLoop implements Runnable {
 
             try {
                 Thread.sleep(Integer.valueOf(settingsList.get("checkInterval")) * 60000);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (NumberFormatException error) {
+                error.printStackTrace();
+            } catch (InterruptedException error) {
+                error.printStackTrace();
             }
         }
     }
