@@ -3,35 +3,38 @@ package src;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.JWindow;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 class Settingswindow {
     private Map<String, String> settingsList;
-    private JWindow bgWindow;
+    private JFrame bgWindow;
 
     private Point mouseDownCompCoords = null;
     private boolean dragging = false;
 
     private boolean open = false;
     
-    public Settingswindow(Map<String, String> settingsList, JWindow bgWindow) {
+    public Settingswindow(Map<String, String> settingsList, JFrame bgWindow) {
         this.settingsList = settingsList;
         this.bgWindow = bgWindow;
     }
@@ -50,12 +53,27 @@ class Settingswindow {
 
         JFrame frame = new JFrame();
 
-        ImageIcon imageIcon = new ImageIcon("./image/nsico.png");
-        frame.setIconImage(imageIcon.getImage());
-        frame.setPreferredSize(new Dimension(400, 260));
+        URL iconUrl = getClass().getResource("images/nsicon.png");
+        Image windowIcon = null;
+        
+        try {
+            if (iconUrl != null) {
+                windowIcon = ImageIO.read(iconUrl);
+            } else {
+                File imgFile = new File("./src/images/nsicon.png");
+                if (!imgFile.exists()) imgFile = new File("./images/nsicon.png");
+                
+                if (imgFile.exists()) windowIcon = ImageIO.read(imgFile);
+            }
+        } catch (IOException e) {}
+        
+        if (windowIcon != null) {
+            frame.setIconImage(windowIcon);
+        }
+        frame.setPreferredSize(new Dimension(400, 380));
 
         int x = ((dim.width - frame.getSize().width) / 2) - 200;
-        int y = ((dim.height - frame.getSize().height) / 2) - 110;
+        int y = ((dim.height - frame.getSize().height) / 2) - 190;
 
         frame.setLocation(x, y);
         frame.setUndecorated(true);
@@ -77,42 +95,82 @@ class Settingswindow {
         errorMessage.setBackground(new Color(17, 17, 17));
         errorMessage.setForeground(Color.RED);
         errorMessage.setFont(new Font("Ubuntu", Font.PLAIN, 20));
-        errorMessage.setBounds(10, 222, 330, 24);
+        errorMessage.setBounds(10, 342, 330, 24);
 
         frame.getContentPane().add(errorMessage);
 
-        JTextField nsurlFeild = textFeildFactory.create("Nightscout URL", 10, 40, 150, 20);
+        JLabel nsurlLabel = new JLabel("Nightscout URL");
+        nsurlLabel.setForeground(Color.WHITE);
+        nsurlLabel.setBounds(10, 40, 150, 20);
+        frame.getContentPane().add(nsurlLabel);
+        
+        JTextField nsurlFeild = textFeildFactory.create("Nightscout URL", 10, 60, 150, 20);
         nsurlFeild.setText(settingsList.get("nsurl"));
         frame.getContentPane().add(nsurlFeild);
 
-        JTextField apiSecretFeild = textFeildFactory.create("API_SECRET", 10, 70, 150, 20);
+        JLabel apiSecretLabel = new JLabel("API Secret");
+        apiSecretLabel.setForeground(Color.WHITE);
+        apiSecretLabel.setBounds(10, 90, 150, 20);
+        frame.getContentPane().add(apiSecretLabel);
+        
+        JTextField apiSecretFeild = textFeildFactory.create("API_SECRET", 10, 110, 150, 20);
         apiSecretFeild.setText(settingsList.get("apiSecret"));
         frame.getContentPane().add(apiSecretFeild);
 
-        JTextField veryHighBgFeild = textFeildFactory.create("Very High BG", 10, 100, 150, 20);
+        JLabel veryHighBgLabel = new JLabel("Very High BG");
+        veryHighBgLabel.setForeground(Color.WHITE);
+        veryHighBgLabel.setBounds(10, 140, 150, 20);
+        frame.getContentPane().add(veryHighBgLabel);
+        
+        JTextField veryHighBgFeild = textFeildFactory.create("Very High BG", 10, 160, 150, 20);
         veryHighBgFeild.setText(settingsList.get("veryHighBg"));
         frame.getContentPane().add(veryHighBgFeild);
 
-        JTextField highBgFeild = textFeildFactory.create("High BG", 10, 130, 150, 20);
+        JLabel highBgLabel = new JLabel("High BG");
+        highBgLabel.setForeground(Color.WHITE);
+        highBgLabel.setBounds(10, 190, 150, 20);
+        frame.getContentPane().add(highBgLabel);
+        
+        JTextField highBgFeild = textFeildFactory.create("High BG", 10, 210, 150, 20);
         highBgFeild.setText(settingsList.get("highBg"));
         frame.getContentPane().add(highBgFeild);
 
-        JTextField lowBgFeild = textFeildFactory.create("Low BG", 10, 160, 150, 20);
+        JLabel lowBgLabel = new JLabel("Low BG");
+        lowBgLabel.setForeground(Color.WHITE);
+        lowBgLabel.setBounds(10, 240, 150, 20);
+        frame.getContentPane().add(lowBgLabel);
+        
+        JTextField lowBgFeild = textFeildFactory.create("Low BG", 10, 260, 150, 20);
         lowBgFeild.setText(settingsList.get("lowBg"));
         frame.getContentPane().add(lowBgFeild);
 
-        JTextField veryLowBgFeild = textFeildFactory.create("Very Low BG", 10, 190, 150, 20);
+        JLabel veryLowBgLabel = new JLabel("Very Low BG");
+        veryLowBgLabel.setForeground(Color.WHITE);
+        veryLowBgLabel.setBounds(10, 290, 150, 20);
+        frame.getContentPane().add(veryLowBgLabel);
+        
+        JTextField veryLowBgFeild = textFeildFactory.create("Very Low BG", 10, 310, 150, 20);
         veryLowBgFeild.setText(settingsList.get("veryLowBg"));
         frame.getContentPane().add(veryLowBgFeild);
 
-        JTextField checkInterval = textFeildFactory.create("Check Interval (mins)", 240, 100, 150, 20);
+        JLabel checkIntervalLabel = new JLabel("Check Interval (mins)");
+        checkIntervalLabel.setForeground(Color.WHITE);
+        checkIntervalLabel.setBounds(240, 90, 150, 20);
+        frame.getContentPane().add(checkIntervalLabel);
+        
+        JTextField checkInterval = textFeildFactory.create("Check Interval (mins)", 240, 110, 150, 20);
         checkInterval.setText(settingsList.get("checkInterval"));
         frame.getContentPane().add(checkInterval);
+
+        JLabel bgPositionLabel = new JLabel("BG Position");
+        bgPositionLabel.setForeground(Color.WHITE);
+        bgPositionLabel.setBounds(240, 140, 150, 20);
+        frame.getContentPane().add(bgPositionLabel);
 
         JButton dragBgWindow = new JButton("Drag BG window");
         dragBgWindow.setBackground(new Color(25, 25, 25));
         dragBgWindow.setForeground(Color.WHITE);
-        dragBgWindow.setBounds(240, 130, 150, 20);
+        dragBgWindow.setBounds(240, 160, 150, 20);
         dragBgWindow.setFocusable(false);
 
         Border paddingBorder = new EmptyBorder(0, 4, 0, 4);
@@ -138,11 +196,21 @@ class Settingswindow {
             }
         });
 
-        JTextField bgWinX = textFeildFactory.create("BG Window X", 240, 160, 150, 20);
+        JLabel bgWinXLabel = new JLabel("BG Window X");
+        bgWinXLabel.setForeground(Color.WHITE);
+        bgWinXLabel.setBounds(240, 190, 150, 20);
+        frame.getContentPane().add(bgWinXLabel);
+        
+        JTextField bgWinX = textFeildFactory.create("BG Window X", 240, 210, 150, 20);
         bgWinX.setText(settingsList.get("winx"));
         frame.getContentPane().add(bgWinX);
 
-        JTextField bgWinY = textFeildFactory.create("BG Window Y", 240, 190, 150, 20);
+        JLabel bgWinYLabel = new JLabel("BG Window Y");
+        bgWinYLabel.setForeground(Color.WHITE);
+        bgWinYLabel.setBounds(240, 240, 150, 20);
+        frame.getContentPane().add(bgWinYLabel);
+        
+        JTextField bgWinY = textFeildFactory.create("BG Window Y", 240, 260, 150, 20);
         bgWinY.setText(settingsList.get("winy"));
         frame.getContentPane().add(bgWinY);
 
@@ -168,11 +236,16 @@ class Settingswindow {
 
         frame.getContentPane().add(dragBgWindow);
 
+        JLabel unitLabel = new JLabel("BG Unit");
+        unitLabel.setForeground(Color.WHITE);
+        unitLabel.setBounds(240, 40, 150, 20);
+        frame.getContentPane().add(unitLabel);
+
         JRadioButton mgdlButton = new JRadioButton("mg/dl");
         JRadioButton mmollButton = new JRadioButton("mmol/L");
 
-        mgdlButton.setBounds(240, 40, 150, 20);
-        mmollButton.setBounds(240, 70, 150, 20);
+        mgdlButton.setBounds(240, 60, 70, 20);
+        mmollButton.setBounds(310, 60, 80, 20);
 
         mgdlButton.setBackground(new Color(25, 25, 25));
         mgdlButton.setForeground(Color.WHITE);
@@ -201,7 +274,7 @@ class Settingswindow {
         JButton saveSettings = new JButton("✓");
         saveSettings.setBackground(new Color(25, 25, 25));
         saveSettings.setForeground(Color.GREEN);
-        saveSettings.setBounds(360, 220, 30, 30);
+        saveSettings.setBounds(360, 340, 30, 30);
         saveSettings.setFocusable(false);
 
         saveSettings.setBorder(noBorder);
@@ -236,7 +309,7 @@ class Settingswindow {
         JButton discardSettings = new JButton("╳");
         discardSettings.setBackground(new Color(25, 25, 25));
         discardSettings.setForeground(Color.RED);
-        discardSettings.setBounds(320, 220, 30, 30);
+        discardSettings.setBounds(320, 340, 30, 30);
         discardSettings.setFocusable(false);
 
         discardSettings.setBorder(noBorder);
