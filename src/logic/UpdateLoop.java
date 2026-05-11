@@ -2,16 +2,14 @@ package src.logic;
 
 import java.awt.Color;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.text.DecimalFormat;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,143 +23,134 @@ public class UpdateLoop implements Runnable {
     private JLabel bgLabel;
     private Map<String, String> settingsList;
 
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
+
+    private static final Map<String, String> DIRECTIONS;
+    static {
+        Map<String, String> map = new HashMap<>();
+        map.put("TripleUp", "⤊");
+        map.put("DoubleUp", "⇈︎");
+        map.put("SingleUp", "↑︎");
+        map.put("FortyFiveUp", "↗︎");
+        map.put("Flat", "→︎");
+        map.put("FortyFiveDown", "↘︎");
+        map.put("SingleDown", "↓︎");
+        map.put("DoubleDown", "⇊");
+        map.put("TripleDown", "⤋");
+        map.put("NON COMPUTABLE", "-");
+        map.put("RATE OUT OF RANGE", "⇕");
+        map.put("NONE", "⇼");
+        DIRECTIONS = Collections.unmodifiableMap(map);
+    }
+
     public UpdateLoop(JLabel bgLabel, Map<String, String> settingsList) {
         this.bgLabel = bgLabel;
         this.settingsList = settingsList;
     }
 
+    @Override
     public void run() {
+        DecimalFormat df = new DecimalFormat("0.0");
+
         while (true) {
-            double veryHighBg = Double.valueOf(settingsList.get("veryHighBg"));
-            double highBg = Double.valueOf(settingsList.get("highBg"));
-            double lowBg = Double.valueOf(settingsList.get("lowBg"));
-            double veryLowBg = Double.valueOf(settingsList.get("veryLowBg"));
+            double veryHighBg = Double.parseDouble(settingsList.get("veryHighBg"));
+            double highBg = Double.parseDouble(settingsList.get("highBg"));
+            double lowBg = Double.parseDouble(settingsList.get("lowBg"));
+            double veryLowBg = Double.parseDouble(settingsList.get("veryLowBg"));
+            boolean isMgdl = Boolean.parseBoolean(settingsList.get("mgdl"));
 
-            URL url = null;
-
-            try {
-                url = new URI("http://" + settingsList.get("nsurl") + "/api/v1/entries.json?count=1").toURL();
-            } catch (MalformedURLException | URISyntaxException error) {
-                error.printStackTrace();
-            }
-
+            String time = LocalTime.now().format(TIME_FORMATTER);
             HttpURLConnection connection = null;
             int responseCode = 0;
 
             try {
-                if (url != null) {
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-                    connection.setRequestProperty("accept", "application/json");
-                    connection.setRequestProperty("API-SECRET", Sha1.hash(settingsList.get("apiSecret")));
-                    responseCode = connection.getResponseCode();
-                }
-            } catch (IOException error) {
-                error.printStackTrace();
-            }
+                boolean useHttp = Boolean.parseBoolean(settingsList.get("useHttp"));
+                String protocol = useHttp ? "http" : "https";
+                URL url = new URI(protocol + "://" + settingsList.get("nsurl") + "/api/v1/entries.json?count=1").toURL();
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("accept", "application/json");
+                connection.setRequestProperty("API-SECRET", Sha1.hash(settingsList.get("apiSecret")));
+                responseCode = connection.getResponseCode();
 
-            Map<String, String> directions = new HashMap<String, String>() {{
-                put("TripleUp", "⤊");
-                put("DoubleUp", "⇈︎");
-                put("SingleUp", "↑︎");
-                put("FortyFiveUp", "↗︎");
-                put("Flat", "→︎");
-                put("FortyFiveDown", "↘︎");
-                put("SingleDown", "↘︎");
-                put("DoubleDown", "⇊");
-                put("TripleDown", "⤋");
-                put("NON COMPUTABLE", "-");
-                put("RATE OUT OF RANGE", "⇕");
-                put("NONE", "⇼");
-            }};
-
-        String time = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
-
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader input = null;
-
-                try {
-                    input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                } catch (IOException error) {
-                    error.printStackTrace();
-                }
-
-                String[] response = null;
-
-                try {
-                    response = input.readLine().split(",");
-                } catch (IOException error) {
-                    error.printStackTrace();
-                }
-                
-                double bg = 0;
-                String direction = "⇼";
-
-                for (String value : response) {
-                    if (value.indexOf("sgv") != -1 && value.indexOf("type") == -1) {
-                        bg = Double.valueOf(value.substring(6));
-
-                        if (!Boolean.parseBoolean(settingsList.get("mgdl"))) {
-                            bg /= 18;
-                        }
-                    } else if (value.indexOf("direction") != -1) {
-                        direction = value.substring(13, value.length() - 1);
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String[] response;
+                    try (BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                        String line = input.readLine();
+                        response = line != null ? line.split(",") : new String[0];
                     }
-                }
+                    
+                    double bg = 0;
+                    String direction = "⇼";
 
-                if (bg >= veryHighBg || bg <= veryLowBg) {
-                    bgLabel.setForeground(Color.RED);
-                } else if (bg >= highBg || bg <= lowBg) {
-                    bgLabel.setForeground(Color.YELLOW);
+                    for (String value : response) {
+                        if (value.contains("sgv") && !value.contains("type")) {
+                            bg = Double.parseDouble(value.substring(6));
+                            if (!isMgdl) {
+                                bg /= 18;
+                            }
+                        } else if (value.contains("direction")) {
+                            direction = value.substring(13, value.length() - 1);
+                        }
+                    }
+
+                    if (bg >= veryHighBg || bg <= veryLowBg) {
+                        bgLabel.setForeground(Color.RED);
+                    } else if (bg >= highBg || bg <= lowBg) {
+                        bgLabel.setForeground(Color.YELLOW);
+                    } else {
+                        bgLabel.setForeground(Color.GREEN);
+                    }
+
+                    bgLabel.setText(df.format(bg) + DIRECTIONS.getOrDefault(direction, "⇼"));
+
+                    Main.currentStatusText = "Status: OK (" + time + ")";
+                    Main.currentStatusColor = Color.GREEN;
+
+                    if (Main.statusLabel != null) {
+                        Main.statusLabel.setText(Main.currentStatusText);
+                        Main.statusLabel.setForeground(Main.currentStatusColor);
+                    }
+
+                    if (Main.trayIcon != null) {
+                        Main.trayIcon.setToolTip("Nightscout: OK | BG: " + df.format(bg) + " " + DIRECTIONS.getOrDefault(direction, "⇼") + " | Updated: " + time);
+                    }
                 } else {
-                    bgLabel.setForeground(Color.GREEN);
+                    handleErrorState(responseCode, time);
                 }
-
-                DecimalFormat df = new DecimalFormat("0.0");
-
-                bgLabel.setText(df.format(bg) + directions.get(direction));
-
-                try {
-                    input.close();
-                } catch (IOException error) {
-                    error.printStackTrace();
+            } catch (Exception error) {
+                error.printStackTrace();
+                handleErrorState(responseCode, time);
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
                 }
-            
-            Main.currentStatusText = "Status: OK (" + time + ")";
-            Main.currentStatusColor = Color.GREEN;
-            
-            if (Main.statusLabel != null) {
-                Main.statusLabel.setText(Main.currentStatusText);
-                Main.statusLabel.setForeground(Main.currentStatusColor);
-            }
-
-            if (Main.trayIcon != null) {
-                Main.trayIcon.setToolTip("Nightscout: OK | BG: " + df.format(bg) + " " + directions.get(direction) + " | Updated: " + time);
-            }
-            } else {
-                bgLabel.setText("Err");
-                bgLabel.setForeground(Color.RED);
-            
-            Main.currentStatusText = "Status: Error (" + responseCode + ")";
-            Main.currentStatusColor = Color.RED;
-            
-            if (Main.statusLabel != null) {
-                Main.statusLabel.setText(Main.currentStatusText);
-                Main.statusLabel.setForeground(Main.currentStatusColor);
-            }
-
-            if (Main.trayIcon != null) {
-                Main.trayIcon.setToolTip("Nightscout: Error (" + responseCode + ") | Last attempt: " + time);
-            }
             }
 
             try {
-                Thread.sleep(Integer.valueOf(settingsList.get("checkInterval")) * 60000);
+                Thread.sleep(Integer.parseInt(settingsList.get("checkInterval")) * 60000L);
             } catch (NumberFormatException error) {
                 error.printStackTrace();
             } catch (InterruptedException e) {
                 // Thread interrupted to force an immediate update check
             }
+        }
+    }
+
+    private void handleErrorState(int responseCode, String time) {
+        bgLabel.setText("Err");
+        bgLabel.setForeground(Color.RED);
+
+        Main.currentStatusText = "Status: Error (" + responseCode + ")";
+        Main.currentStatusColor = Color.RED;
+
+        if (Main.statusLabel != null) {
+            Main.statusLabel.setText(Main.currentStatusText);
+            Main.statusLabel.setForeground(Main.currentStatusColor);
+        }
+
+        if (Main.trayIcon != null) {
+            Main.trayIcon.setToolTip("Nightscout: Error (" + responseCode + ") | Last attempt: " + time);
         }
     }
 }
