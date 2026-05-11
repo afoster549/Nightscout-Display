@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.net.URL;
+import java.text.DecimalFormat;
 
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
@@ -327,11 +328,62 @@ class Settingswindow {
         unitGroup.add(mgdlButton);
         unitGroup.add(mmollButton);
 
-        if (settingsList.get("mgdl") == "true") {
+        if ("true".equals(settingsList.get("mgdl"))) {
             mgdlButton.setSelected(true);
         } else {
             mmollButton.setSelected(true);
         }
+
+        final boolean[] currentIsMgdl = { mgdlButton.isSelected() };
+
+        ActionListener unitChangeListener = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                boolean toMgdl = mgdlButton.isSelected();
+                if (toMgdl != currentIsMgdl[0]) {
+                    JTextField[] fields = {veryHighBgFeild, highBgFeild, lowBgFeild, veryLowBgFeild};
+                    for (JTextField field : fields) {
+                        try {
+                            double val = Double.parseDouble(field.getText());
+                            val = (double) Math.round((toMgdl ? val * 18.0 : val / 18.0) * 10) / 10.0;
+                            field.setText(String.valueOf(val));
+                        } catch (NumberFormatException e) {}
+                    }
+
+                    try {
+                        JLabel bgLabel = (JLabel) bgWindow.getContentPane().getComponent(0);
+                        String currentText = bgLabel.getText();
+                        if (!currentText.equals("Err") && !currentText.isEmpty()) {
+                            String numericPart = currentText.replaceAll("[^0-9.]", "");
+                            String directionPart = currentText.replaceAll("[0-9.]", "");
+                            
+                            double val = Double.parseDouble(numericPart);
+                            val = toMgdl ? val * 18.0 : val / 18.0;
+                            
+                            DecimalFormat df = new DecimalFormat("#.#");
+                            bgLabel.setText(df.format(val) + directionPart);
+
+                            double vh = Double.parseDouble(veryHighBgFeild.getText());
+                            double h = Double.parseDouble(highBgFeild.getText());
+                            double l = Double.parseDouble(lowBgFeild.getText());
+                            double vl = Double.parseDouble(veryLowBgFeild.getText());
+
+                            if (val >= vh || val <= vl) {
+                                bgLabel.setForeground(Color.RED);
+                            } else if (val >= h || val <= l) {
+                                bgLabel.setForeground(Color.YELLOW);
+                            } else {
+                                bgLabel.setForeground(Color.GREEN);
+                            }
+                        }
+                    } catch (Exception e) {}
+
+                    currentIsMgdl[0] = toMgdl;
+                }
+            }
+        };
+
+        mgdlButton.addActionListener(unitChangeListener);
+        mmollButton.addActionListener(unitChangeListener);
 
         Border noBorder = new EmptyBorder(0, 0, 0, 0);
 
@@ -349,7 +401,12 @@ class Settingswindow {
             public void actionPerformed(ActionEvent event) {
                 boolean forceCheck = !settingsList.get("nsurl").equals(nsurlFeild.getText()) || 
                                      !settingsList.get("apiSecret").equals(apiSecretFeild.getText()) ||
-                                     !settingsList.get("checkInterval").equals(checkInterval.getText());
+                                     !settingsList.get("checkInterval").equals(checkInterval.getText()) ||
+                                     !settingsList.get("mgdl").equals(String.valueOf(mgdlButton.isSelected())) ||
+                                     !settingsList.get("veryHighBg").equals(veryHighBgFeild.getText()) ||
+                                     !settingsList.get("highBg").equals(highBgFeild.getText()) ||
+                                     !settingsList.get("lowBg").equals(lowBgFeild.getText()) ||
+                                     !settingsList.get("veryLowBg").equals(veryLowBgFeild.getText());
 
                 settingsList.put("veryHighBg", veryHighBgFeild.getText());
                 settingsList.put("highBg", highBgFeild.getText());

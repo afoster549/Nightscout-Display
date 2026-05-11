@@ -29,12 +29,12 @@ class UpdateLoop implements Runnable {
     }
 
     public void run() {
-        double veryHighBg = Double.valueOf(settingsList.get("veryHighBg"));
-        double highBg = Double.valueOf(settingsList.get("highBg"));
-        double lowBg = Double.valueOf(settingsList.get("lowBg"));
-        double veryLowBg = Double.valueOf(settingsList.get("veryLowBg"));
-
         while (true) {
+            double veryHighBg = Double.valueOf(settingsList.get("veryHighBg"));
+            double highBg = Double.valueOf(settingsList.get("highBg"));
+            double lowBg = Double.valueOf(settingsList.get("lowBg"));
+            double veryLowBg = Double.valueOf(settingsList.get("veryLowBg"));
+
             URL url = null;
 
             try {
@@ -99,9 +99,7 @@ class UpdateLoop implements Runnable {
                     if (value.indexOf("sgv") != -1 && value.indexOf("type") == -1) {
                         bg = Double.valueOf(value.substring(6));
 
-                        if (Boolean.parseBoolean(settingsList.get("mgdl"))) {
-                            bgLabel.setText(Double.toString(bg));
-                        } else {
+                        if (!Boolean.parseBoolean(settingsList.get("mgdl"))) {
                             bg /= 18;
                         }
                     } else if (value.indexOf("direction") != -1) {
@@ -109,9 +107,9 @@ class UpdateLoop implements Runnable {
                     }
                 }
 
-                if (bg >= veryHighBg | bg <= veryLowBg) {
+                if (bg >= veryHighBg || bg <= veryLowBg) {
                     bgLabel.setForeground(Color.RED);
-                } else if (bg >= highBg | bg <= lowBg) {
+                } else if (bg >= highBg || bg <= lowBg) {
                     bgLabel.setForeground(Color.YELLOW);
                 } else {
                     bgLabel.setForeground(Color.GREEN);
