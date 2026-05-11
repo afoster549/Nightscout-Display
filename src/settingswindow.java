@@ -21,8 +21,10 @@ import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -114,6 +116,21 @@ class Settingswindow {
         nsurlLabel.setBounds(10, 40, 150, 20);
         frame.getContentPane().add(nsurlLabel);
         
+        JLabel useHttpLabel = new JLabel("Protocol");
+        useHttpLabel.setForeground(Color.WHITE);
+        useHttpLabel.setBounds(240, 40, 150, 20);
+        frame.getContentPane().add(useHttpLabel);
+
+        JCheckBox useHttpCheckbox = new JCheckBox("Use HTTP");
+        useHttpCheckbox.setBounds(240, 60, 150, 20);
+        useHttpCheckbox.setBackground(new Color(17, 17, 17));
+        useHttpCheckbox.setForeground(Color.WHITE);
+        useHttpCheckbox.setFocusable(false);
+        if ("true".equals(settingsList.get("useHttp"))) {
+            useHttpCheckbox.setSelected(true);
+        }
+        frame.getContentPane().add(useHttpCheckbox);
+
         JTextField nsurlFeild = textFeildFactory.create("Nightscout URL", 10, 60, 150, 20);
         nsurlFeild.setText(settingsList.get("nsurl"));
         frame.getContentPane().add(nsurlFeild);
@@ -123,7 +140,7 @@ class Settingswindow {
         apiSecretLabel.setBounds(10, 90, 150, 20);
         frame.getContentPane().add(apiSecretLabel);
         
-        JTextField apiSecretFeild = textFeildFactory.create("API_SECRET", 10, 110, 150, 20);
+        JPasswordField apiSecretFeild = textFeildFactory.createPassword("API_SECRET", 10, 110, 150, 20);
         apiSecretFeild.setText(settingsList.get("apiSecret"));
         frame.getContentPane().add(apiSecretFeild);
 
@@ -197,10 +214,10 @@ class Settingswindow {
 
         JLabel checkIntervalLabel = new JLabel("Check Interval (mins)");
         checkIntervalLabel.setForeground(Color.WHITE);
-        checkIntervalLabel.setBounds(240, 90, 150, 20);
+        checkIntervalLabel.setBounds(240, 140, 150, 20);
         frame.getContentPane().add(checkIntervalLabel);
         
-        JTextField checkInterval = textFeildFactory.create("Check Interval (mins)", 240, 110, 150, 20);
+        JTextField checkInterval = textFeildFactory.create("Check Interval (mins)", 240, 160, 150, 20);
         checkInterval.setText(settingsList.get("checkInterval"));
         checkInterval.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -213,13 +230,13 @@ class Settingswindow {
 
         JLabel bgPositionLabel = new JLabel("BG Position");
         bgPositionLabel.setForeground(Color.WHITE);
-        bgPositionLabel.setBounds(240, 140, 150, 20);
+        bgPositionLabel.setBounds(240, 190, 150, 20);
         frame.getContentPane().add(bgPositionLabel);
 
         JButton dragBgWindow = new JButton("Drag BG window");
         dragBgWindow.setBackground(new Color(25, 25, 25));
         dragBgWindow.setForeground(Color.WHITE);
-        dragBgWindow.setBounds(240, 160, 150, 20);
+        dragBgWindow.setBounds(240, 210, 150, 20);
         dragBgWindow.setFocusable(false);
 
         Border paddingBorder = new EmptyBorder(0, 4, 0, 4);
@@ -247,10 +264,10 @@ class Settingswindow {
 
         JLabel bgWinXLabel = new JLabel("BG Window X");
         bgWinXLabel.setForeground(Color.WHITE);
-        bgWinXLabel.setBounds(240, 190, 150, 20);
+        bgWinXLabel.setBounds(240, 240, 150, 20);
         frame.getContentPane().add(bgWinXLabel);
         
-        JTextField bgWinX = textFeildFactory.create("BG Window X", 240, 210, 150, 20);
+        JTextField bgWinX = textFeildFactory.create("BG Window X", 240, 260, 150, 20);
         bgWinX.setText(settingsList.get("winx"));
         bgWinX.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -264,10 +281,10 @@ class Settingswindow {
 
         JLabel bgWinYLabel = new JLabel("BG Window Y");
         bgWinYLabel.setForeground(Color.WHITE);
-        bgWinYLabel.setBounds(240, 240, 150, 20);
+        bgWinYLabel.setBounds(240, 290, 150, 20);
         frame.getContentPane().add(bgWinYLabel);
         
-        JTextField bgWinY = textFeildFactory.create("BG Window Y", 240, 260, 150, 20);
+        JTextField bgWinY = textFeildFactory.create("BG Window Y", 240, 310, 150, 20);
         bgWinY.setText(settingsList.get("winy"));
         bgWinY.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -303,14 +320,14 @@ class Settingswindow {
 
         JLabel unitLabel = new JLabel("BG Unit");
         unitLabel.setForeground(Color.WHITE);
-        unitLabel.setBounds(240, 40, 150, 20);
+        unitLabel.setBounds(240, 90, 150, 20);
         frame.getContentPane().add(unitLabel);
 
         JRadioButton mgdlButton = new JRadioButton("mg/dl");
         JRadioButton mmollButton = new JRadioButton("mmol/L");
 
-        mgdlButton.setBounds(240, 60, 70, 20);
-        mmollButton.setBounds(310, 60, 80, 20);
+        mgdlButton.setBounds(240, 110, 70, 20);
+        mmollButton.setBounds(310, 110, 80, 20);
 
         mgdlButton.setBackground(new Color(25, 25, 25));
         mgdlButton.setForeground(Color.WHITE);
@@ -359,7 +376,7 @@ class Settingswindow {
                             double val = Double.parseDouble(numericPart);
                             val = toMgdl ? val * 18.0 : val / 18.0;
                             
-                            DecimalFormat df = new DecimalFormat("#.#");
+                            DecimalFormat df = new DecimalFormat("0.0");
                             bgLabel.setText(df.format(val) + directionPart);
 
                             double vh = Double.parseDouble(veryHighBgFeild.getText());
@@ -400,13 +417,14 @@ class Settingswindow {
         saveSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 boolean forceCheck = !settingsList.get("nsurl").equals(nsurlFeild.getText()) || 
-                                     !settingsList.get("apiSecret").equals(apiSecretFeild.getText()) ||
+                                     !settingsList.get("apiSecret").equals(new String(apiSecretFeild.getPassword())) ||
                                      !settingsList.get("checkInterval").equals(checkInterval.getText()) ||
                                      !settingsList.get("mgdl").equals(String.valueOf(mgdlButton.isSelected())) ||
                                      !settingsList.get("veryHighBg").equals(veryHighBgFeild.getText()) ||
                                      !settingsList.get("highBg").equals(highBgFeild.getText()) ||
                                      !settingsList.get("lowBg").equals(lowBgFeild.getText()) ||
-                                     !settingsList.get("veryLowBg").equals(veryLowBgFeild.getText());
+                                     !settingsList.get("veryLowBg").equals(veryLowBgFeild.getText()) ||
+                                     !String.valueOf(useHttpCheckbox.isSelected()).equals(settingsList.get("useHttp"));
 
                 settingsList.put("veryHighBg", veryHighBgFeild.getText());
                 settingsList.put("highBg", highBgFeild.getText());
@@ -415,9 +433,10 @@ class Settingswindow {
                 settingsList.put("checkInterval", checkInterval.getText());
                 settingsList.put("mgdl", String.valueOf(mgdlButton.isSelected()));
                 settingsList.put("nsurl", nsurlFeild.getText());
-                settingsList.put("apiSecret", apiSecretFeild.getText());
+                settingsList.put("apiSecret", new String(apiSecretFeild.getPassword()));
                 settingsList.put("winx", bgWinX.getText());
                 settingsList.put("winy", bgWinY.getText());
+                settingsList.put("useHttp", String.valueOf(useHttpCheckbox.isSelected()));
 
                 Settings settings = new Settings();
 

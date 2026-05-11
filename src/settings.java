@@ -43,7 +43,8 @@ class Settings {
         "\nnsurl=" + settingsList.get("nsurl") +
         "\napiSecret=" + settingsList.get("apiSecret") +
         "\nwinx=" + settingsList.get("winx") +
-        "\nwiny=" + settingsList.get("winy");
+        "\nwiny=" + settingsList.get("winy") +
+        "\nuseHttp=" + settingsList.get("useHttp");
 
         try (FileWriter writer = new FileWriter(settingsFile)) {
             writer.write(settingsJoined);
@@ -73,7 +74,8 @@ class Settings {
         "\nnsurl=NightScout URL" +
         "\napiSecret=APISecret" +
         "\nwinx=0" +
-        "\nwiny=0";
+        "\nwiny=0" +
+        "\nuseHttp=false";
 
         try (FileWriter writer = new FileWriter(settingsFile)) {
             writer.write(settingsJoined);

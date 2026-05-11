@@ -115,7 +115,7 @@ class UpdateLoop implements Runnable {
                     bgLabel.setForeground(Color.GREEN);
                 }
 
-                DecimalFormat df = new DecimalFormat("#.#");
+                DecimalFormat df = new DecimalFormat("0.0");
 
                 bgLabel.setText(df.format(bg) + directions.get(direction));
 
