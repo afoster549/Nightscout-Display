@@ -60,7 +60,7 @@ public class Main {
         BgWindow bgWindowClass = new BgWindow(settingsList);
         JFrame bgWindow = bgWindowClass.create();
 
-        Settingswindow settingsWindowClass = new Settingswindow(settingsList, bgWindow);
+        SettingsWindow settingsWindowClass = new SettingsWindow(settingsList, bgWindow);
 
         settingsItem.addActionListener(new ActionListener() {
             @Override

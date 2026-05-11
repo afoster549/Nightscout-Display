@@ -30,7 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-class Settingswindow {
+class SettingsWindow {
     private Map<String, String> settingsList;
     private JFrame bgWindow;
 
@@ -39,7 +39,7 @@ class Settingswindow {
 
     private boolean open = false;
     
-    public Settingswindow(Map<String, String> settingsList, JFrame bgWindow) {
+    public SettingsWindow(Map<String, String> settingsList, JFrame bgWindow) {
         this.settingsList = settingsList;
         this.bgWindow = bgWindow;
     }
