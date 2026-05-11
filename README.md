@@ -6,7 +6,7 @@ Displays the current blood sugar reading from Nightscout on your desktop.
 
 ### BG Window
 
-![Screenshot of Blood Glucos Window](./images/bgwindow.png)
+![Screenshot of Blood Glucos Window](./images/bgWindow.png)
 
 The BG window can be placed anywhere on screen and shows the current blood glucose value, the trend arrow. The colour is based of the range values in the settings.
 
