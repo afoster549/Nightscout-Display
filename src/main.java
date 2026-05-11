@@ -19,7 +19,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-class Main {
+public class Main {
     static Settings settings = new Settings();
     static TrayIcon trayIcon;
     static JLabel statusLabel;
