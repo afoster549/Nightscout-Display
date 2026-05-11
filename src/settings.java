@@ -44,7 +44,8 @@ class Settings {
         "\napiSecret=" + settingsList.get("apiSecret") +
         "\nwinx=" + settingsList.get("winx") +
         "\nwiny=" + settingsList.get("winy") +
-        "\nuseHttp=" + settingsList.get("useHttp");
+        "\nuseHttp=" + settingsList.get("useHttp") +
+        "\nalignRight=" + (settingsList.get("alignRight") != null ? settingsList.get("alignRight") : "false");
 
         try (FileWriter writer = new FileWriter(settingsFile)) {
             writer.write(settingsJoined);
@@ -75,7 +76,8 @@ class Settings {
         "\napiSecret=" +
         "\nwinx=900" +
         "\nwiny=500" +
-        "\nuseHttp=false";
+        "\nuseHttp=false" +
+        "\nalignRight=false";
 
         try (FileWriter writer = new FileWriter(settingsFile)) {
             writer.write(settingsJoined);

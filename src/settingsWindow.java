@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -77,10 +79,10 @@ class SettingsWindow {
         if (windowIcon != null) {
             frame.setIconImage(windowIcon);
         }
-        frame.setPreferredSize(new Dimension(400, 380));
+        frame.setPreferredSize(new Dimension(400, 420));
 
         int x = ((dim.width - frame.getSize().width) / 2) - 200;
-        int y = ((dim.height - frame.getSize().height) / 2) - 190;
+        int y = ((dim.height - frame.getSize().height) / 2) - 210;
 
         frame.setLocation(x, y);
         frame.setUndecorated(true);
@@ -109,7 +111,7 @@ class SettingsWindow {
         errorMessage.setBackground(new Color(17, 17, 17));
         errorMessage.setForeground(Color.RED);
         errorMessage.setFont(new Font("Ubuntu", Font.PLAIN, 20));
-        errorMessage.setBounds(100, 342, 210, 24);
+        errorMessage.setBounds(100, 382, 210, 24);
 
         frame.getContentPane().add(errorMessage);
 
@@ -298,6 +300,29 @@ class SettingsWindow {
         });
         frame.getContentPane().add(bgWinY);
 
+        JCheckBox alignRightCheckbox = new JCheckBox("BG Align Right");
+        alignRightCheckbox.setBounds(240, 340, 150, 20);
+        alignRightCheckbox.setBackground(new Color(17, 17, 17));
+        alignRightCheckbox.setForeground(Color.WHITE);
+        alignRightCheckbox.setFocusable(false);
+        if ("true".equals(settingsList.get("alignRight"))) {
+            alignRightCheckbox.setSelected(true);
+        }
+
+        alignRightCheckbox.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent event) {
+                try {
+                    JLabel bgLabel = (JLabel) bgWindow.getContentPane().getComponent(0);
+                    if (alignRightCheckbox.isSelected()) {
+                        bgLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                    } else {
+                        bgLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                    }
+                } catch (Exception ex) {}
+            }
+        });
+        frame.getContentPane().add(alignRightCheckbox);
+
         final boolean[] updatingFromDrag = {false};
 
         DocumentListener locationChangeListener = new DocumentListener() {
@@ -431,7 +456,7 @@ class SettingsWindow {
         JButton defaultSettings = new JButton("Reset");
         defaultSettings.setBackground(new Color(25, 25, 25));
         defaultSettings.setForeground(Color.WHITE);
-        defaultSettings.setBounds(10, 340, 80, 30);
+        defaultSettings.setBounds(10, 380, 80, 30);
         defaultSettings.setFocusable(false);
         defaultSettings.setBorder(new EmptyBorder(0, 4, 0, 4));
         frame.getContentPane().add(defaultSettings);
@@ -450,6 +475,7 @@ class SettingsWindow {
                 currentIsMgdl[0] = false;
                 bgWinX.setText("900");
                 bgWinY.setText("500");
+                alignRightCheckbox.setSelected(false);
             }
         });
 
@@ -458,7 +484,7 @@ class SettingsWindow {
         JButton saveSettings = new JButton("✓");
         saveSettings.setBackground(new Color(25, 25, 25));
         saveSettings.setForeground(Color.GREEN);
-        saveSettings.setBounds(360, 340, 30, 30);
+        saveSettings.setBounds(360, 380, 30, 30);
         saveSettings.setFocusable(false);
 
         saveSettings.setBorder(noBorder);
@@ -475,7 +501,8 @@ class SettingsWindow {
                                      !settingsList.get("highBg").equals(highBgFeild.getText()) ||
                                      !settingsList.get("lowBg").equals(lowBgFeild.getText()) ||
                                      !settingsList.get("veryLowBg").equals(veryLowBgFeild.getText()) ||
-                                     !String.valueOf(useHttpCheckbox.isSelected()).equals(settingsList.get("useHttp"));
+                             !String.valueOf(useHttpCheckbox.isSelected()).equals(settingsList.get("useHttp")) ||
+                             !String.valueOf(alignRightCheckbox.isSelected()).equals(settingsList.get("alignRight"));
 
                 settingsList.put("veryHighBg", veryHighBgFeild.getText());
                 settingsList.put("highBg", highBgFeild.getText());
@@ -488,6 +515,7 @@ class SettingsWindow {
                 settingsList.put("winx", bgWinX.getText());
                 settingsList.put("winy", bgWinY.getText());
                 settingsList.put("useHttp", String.valueOf(useHttpCheckbox.isSelected()));
+                settingsList.put("alignRight", String.valueOf(alignRightCheckbox.isSelected()));
 
                 Settings settings = new Settings();
 
@@ -496,6 +524,15 @@ class SettingsWindow {
                         dragging = false;
                         bgWindow.setBackground(new Color(0, true));
                     }
+
+                    try {
+                        JLabel bgLabel = (JLabel) bgWindow.getContentPane().getComponent(0);
+                        if (alignRightCheckbox.isSelected()) {
+                            bgLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                        } else {
+                            bgLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                        }
+                    } catch (Exception ex) {}
 
                     Main.statusLabel = null;
                     frame.dispose();
@@ -514,7 +551,7 @@ class SettingsWindow {
         JButton discardSettings = new JButton("╳");
         discardSettings.setBackground(new Color(25, 25, 25));
         discardSettings.setForeground(Color.RED);
-        discardSettings.setBounds(320, 340, 30, 30);
+        discardSettings.setBounds(320, 380, 30, 30);
         discardSettings.setFocusable(false);
 
         discardSettings.setBorder(noBorder);
@@ -527,6 +564,15 @@ class SettingsWindow {
 
                 bgWindow.setBackground(new Color(0, true));
                 bgWindow.setLocation(Integer.valueOf(settingsList.get("winx")), Integer.valueOf(settingsList.get("winy")));
+
+                try {
+                    JLabel bgLabel = (JLabel) bgWindow.getContentPane().getComponent(0);
+                    if ("true".equals(settingsList.get("alignRight"))) {
+                        bgLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                    } else {
+                        bgLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                    }
+                } catch (Exception ex) {}
 
                 Main.statusLabel = null;
                 frame.dispose();

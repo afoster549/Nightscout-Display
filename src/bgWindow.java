@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JFrame;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 class BgWindow {
@@ -35,6 +36,12 @@ class BgWindow {
         JLabel bgLabel = new JLabel("");
         bgLabel.setFont(new Font("Ubuntu", Font.PLAIN, 24));
         bgLabel.setForeground(Color.GREEN);
+        
+        if ("true".equals(settingsList.get("alignRight"))) {
+            bgLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        } else {
+            bgLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        }
         window.getContentPane().add(bgLabel);
         
         window.pack();
