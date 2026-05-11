@@ -51,5 +51,7 @@ __BG Window__
 Window X coordinate
 <br>
 Window Y coordinate
+<br>
+Align Right toggles text alignment in the BG window.
 
 __OR__ alternatively you can drag the BG window to your desired location.
