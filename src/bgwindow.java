@@ -3,10 +3,13 @@ package src;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 class BgWindow {
     private Map<String, String> settingsList;
@@ -38,6 +41,15 @@ class BgWindow {
         
         window.setVisible(true);
         
+        Timer onTopTimer = new Timer(500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                window.setAlwaysOnTop(true);
+                window.toFront();
+            }
+        });
+        onTopTimer.start();
+
         UpdateLoop updateLoop = new UpdateLoop(bgLabel, settingsList);
 
         Main.updateThread = new Thread(updateLoop);
