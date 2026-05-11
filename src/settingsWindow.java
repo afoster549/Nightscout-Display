@@ -148,6 +148,23 @@ class SettingsWindow {
         apiSecretFeild.setText(settingsList.get("apiSecret"));
         frame.getContentPane().add(apiSecretFeild);
 
+        KeyAdapter bgFieldKeyListener = new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                JTextField field = (JTextField) e.getSource();
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume();
+                } else if (c == '.' && field.getText().contains(".")) {
+                    e.consume();
+                } else if (Character.isDigit(c) && field.getText().contains(".")) {
+                    int dotIndex = field.getText().indexOf(".");
+                    if (field.getText().length() - dotIndex > 1 && field.getCaretPosition() > dotIndex && field.getSelectedText() == null) {
+                        e.consume();
+                    }
+                }
+            }
+        };
+
         JLabel veryHighBgLabel = new JLabel("Very High BG");
         veryHighBgLabel.setForeground(Color.WHITE);
         veryHighBgLabel.setBounds(160, 40, 140, 20);
@@ -155,21 +172,7 @@ class SettingsWindow {
         
         JTextField veryHighBgFeild = textFeildFactory.create("Very High BG", 160, 60, 140, 20);
         veryHighBgFeild.setText(settingsList.get("veryHighBg"));
-        veryHighBgFeild.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c) && c != '.') {
-                    e.consume();
-                } else if (c == '.' && veryHighBgFeild.getText().contains(".")) {
-                    e.consume();
-                } else if (Character.isDigit(c) && veryHighBgFeild.getText().contains(".")) {
-                    int dotIndex = veryHighBgFeild.getText().indexOf(".");
-                    if (veryHighBgFeild.getText().length() - dotIndex > 1 && veryHighBgFeild.getCaretPosition() > dotIndex && veryHighBgFeild.getSelectedText() == null) {
-                        e.consume();
-                    }
-                }
-            }
-        });
+        veryHighBgFeild.addKeyListener(bgFieldKeyListener);
         frame.getContentPane().add(veryHighBgFeild);
 
         JLabel highBgLabel = new JLabel("High BG");
@@ -179,21 +182,7 @@ class SettingsWindow {
         
         JTextField highBgFeild = textFeildFactory.create("High BG", 160, 110, 140, 20);
         highBgFeild.setText(settingsList.get("highBg"));
-        highBgFeild.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c) && c != '.') {
-                    e.consume();
-                } else if (c == '.' && highBgFeild.getText().contains(".")) {
-                    e.consume();
-                } else if (Character.isDigit(c) && highBgFeild.getText().contains(".")) {
-                    int dotIndex = highBgFeild.getText().indexOf(".");
-                    if (highBgFeild.getText().length() - dotIndex > 1 && highBgFeild.getCaretPosition() > dotIndex && highBgFeild.getSelectedText() == null) {
-                        e.consume();
-                    }
-                }
-            }
-        });
+        highBgFeild.addKeyListener(bgFieldKeyListener);
         frame.getContentPane().add(highBgFeild);
 
         JLabel lowBgLabel = new JLabel("Low BG");
@@ -203,21 +192,7 @@ class SettingsWindow {
         
         JTextField lowBgFeild = textFeildFactory.create("Low BG", 160, 160, 140, 20);
         lowBgFeild.setText(settingsList.get("lowBg"));
-        lowBgFeild.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c) && c != '.') {
-                    e.consume();
-                } else if (c == '.' && lowBgFeild.getText().contains(".")) {
-                    e.consume();
-                } else if (Character.isDigit(c) && lowBgFeild.getText().contains(".")) {
-                    int dotIndex = lowBgFeild.getText().indexOf(".");
-                    if (lowBgFeild.getText().length() - dotIndex > 1 && lowBgFeild.getCaretPosition() > dotIndex && lowBgFeild.getSelectedText() == null) {
-                        e.consume();
-                    }
-                }
-            }
-        });
+        lowBgFeild.addKeyListener(bgFieldKeyListener);
         frame.getContentPane().add(lowBgFeild);
 
         JLabel veryLowBgLabel = new JLabel("Very Low BG");
@@ -227,21 +202,7 @@ class SettingsWindow {
         
         JTextField veryLowBgFeild = textFeildFactory.create("Very Low BG", 160, 210, 140, 20);
         veryLowBgFeild.setText(settingsList.get("veryLowBg"));
-        veryLowBgFeild.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c) && c != '.') {
-                    e.consume();
-                } else if (c == '.' && veryLowBgFeild.getText().contains(".")) {
-                    e.consume();
-                } else if (Character.isDigit(c) && veryLowBgFeild.getText().contains(".")) {
-                    int dotIndex = veryLowBgFeild.getText().indexOf(".");
-                    if (veryLowBgFeild.getText().length() - dotIndex > 1 && veryLowBgFeild.getCaretPosition() > dotIndex && veryLowBgFeild.getSelectedText() == null) {
-                        e.consume();
-                    }
-                }
-            }
-        });
+        veryLowBgFeild.addKeyListener(bgFieldKeyListener);
         frame.getContentPane().add(veryLowBgFeild);
 
         DocumentListener thresholdChangeListener = new DocumentListener() {
@@ -372,6 +333,15 @@ class SettingsWindow {
             }
         });
 
+        KeyAdapter coordKeyListener = new KeyAdapter() {
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '-') {
+                    e.consume();
+                }
+            }
+        };
+
         JLabel bgWinXLabel = new JLabel("BG Window X");
         bgWinXLabel.setForeground(Color.WHITE);
         bgWinXLabel.setBounds(310, 140, 130, 20);
@@ -379,14 +349,7 @@ class SettingsWindow {
         
         JTextField bgWinX = textFeildFactory.create("BG Window X", 310, 160, 130, 20);
         bgWinX.setText(settingsList.get("winx"));
-        bgWinX.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c) && c != '-') {
-                    e.consume();
-                }
-            }
-        });
+        bgWinX.addKeyListener(coordKeyListener);
         frame.getContentPane().add(bgWinX);
 
         JLabel bgWinYLabel = new JLabel("BG Window Y");
@@ -396,14 +359,7 @@ class SettingsWindow {
         
         JTextField bgWinY = textFeildFactory.create("BG Window Y", 310, 210, 130, 20);
         bgWinY.setText(settingsList.get("winy"));
-        bgWinY.addKeyListener(new KeyAdapter() {
-            public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c) && c != '-') {
-                    e.consume();
-                }
-            }
-        });
+        bgWinY.addKeyListener(coordKeyListener);
         frame.getContentPane().add(bgWinY);
 
         JCheckBox alignRightCheckbox = new JCheckBox("Align Right");
