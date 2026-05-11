@@ -36,6 +36,7 @@ import javax.swing.event.DocumentListener;
 
 import src.Main;
 import src.logic.Settings;
+import src.logic.StartupManager;
 
 public class SettingsWindow {
     private Map<String, String> settingsList;
@@ -302,6 +303,16 @@ public class SettingsWindow {
         });
         frame.getContentPane().add(checkInterval);
 
+        JCheckBox startupCheckbox = new JCheckBox("Run on Startup");
+        startupCheckbox.setBounds(10, 240, 140, 20);
+        startupCheckbox.setBackground(new Color(17, 17, 17));
+        startupCheckbox.setForeground(Color.WHITE);
+        startupCheckbox.setFocusable(false);
+        if ("true".equals(settingsList.get("runOnStartup"))) {
+            startupCheckbox.setSelected(true);
+        }
+        frame.getContentPane().add(startupCheckbox);
+
         JLabel bgPositionLabel = new JLabel("BG Position");
         bgPositionLabel.setForeground(Color.WHITE);
         bgPositionLabel.setBounds(310, 90, 130, 20);
@@ -559,6 +570,7 @@ public class SettingsWindow {
                 bgWinX.setText("900");
                 bgWinY.setText("500");
                 alignRightCheckbox.setSelected(false);
+                startupCheckbox.setSelected(false);
             }
         });
 
@@ -618,7 +630,8 @@ public class SettingsWindow {
                                      !settingsList.get("lowBg").equals(lowBgFeild.getText()) ||
                                      !settingsList.get("veryLowBg").equals(veryLowBgFeild.getText()) ||
                              !String.valueOf(useHttpCheckbox.isSelected()).equals(settingsList.get("useHttp")) ||
-                             !String.valueOf(alignRightCheckbox.isSelected()).equals(settingsList.get("alignRight"));
+                             !String.valueOf(alignRightCheckbox.isSelected()).equals(settingsList.get("alignRight")) ||
+                             !String.valueOf(startupCheckbox.isSelected()).equals(settingsList.get("runOnStartup"));
 
                 settingsList.put("veryHighBg", veryHighBgFeild.getText());
                 settingsList.put("highBg", highBgFeild.getText());
@@ -632,6 +645,9 @@ public class SettingsWindow {
                 settingsList.put("winy", bgWinY.getText());
                 settingsList.put("useHttp", String.valueOf(useHttpCheckbox.isSelected()));
                 settingsList.put("alignRight", String.valueOf(alignRightCheckbox.isSelected()));
+                settingsList.put("runOnStartup", String.valueOf(startupCheckbox.isSelected()));
+
+                StartupManager.setRunOnStartup(startupCheckbox.isSelected());
 
                 Settings settings = new Settings();
 

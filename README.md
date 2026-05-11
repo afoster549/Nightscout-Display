@@ -55,3 +55,7 @@ Window Y coordinate
 Align Right toggles text alignment in the BG window.
 
 __OR__ alternatively you can drag the BG window to your desired location.
+
+__Run on Startup__
+
+Toggles if the application should launch automatically on system boot.
