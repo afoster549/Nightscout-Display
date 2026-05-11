@@ -29,6 +29,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 class SettingsWindow {
     private Map<String, String> settingsList;
@@ -107,7 +109,7 @@ class SettingsWindow {
         errorMessage.setBackground(new Color(17, 17, 17));
         errorMessage.setForeground(Color.RED);
         errorMessage.setFont(new Font("Ubuntu", Font.PLAIN, 20));
-        errorMessage.setBounds(10, 342, 330, 24);
+        errorMessage.setBounds(100, 342, 210, 24);
 
         frame.getContentPane().add(errorMessage);
 
@@ -296,6 +298,26 @@ class SettingsWindow {
         });
         frame.getContentPane().add(bgWinY);
 
+        final boolean[] updatingFromDrag = {false};
+
+        DocumentListener locationChangeListener = new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { updateLocation(); }
+            public void removeUpdate(DocumentEvent e) { updateLocation(); }
+            public void changedUpdate(DocumentEvent e) { updateLocation(); }
+
+            private void updateLocation() {
+                if (updatingFromDrag[0]) return;
+                try {
+                    int x = Integer.parseInt(bgWinX.getText());
+                    int y = Integer.parseInt(bgWinY.getText());
+                    bgWindow.setLocation(x, y);
+                } catch (NumberFormatException ex) {}
+            }
+        };
+
+        bgWinX.getDocument().addDocumentListener(locationChangeListener);
+        bgWinY.getDocument().addDocumentListener(locationChangeListener);
+
         bgWindow.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent event) {
                 if (dragging) {
@@ -308,10 +330,14 @@ class SettingsWindow {
             public void mouseDragged(MouseEvent event) {
                 if (dragging) {
                     Point currCoords = event.getLocationOnScreen();
-                    bgWindow.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+                    int newX = currCoords.x - mouseDownCompCoords.x;
+                    int newY = currCoords.y - mouseDownCompCoords.y;
+                    bgWindow.setLocation(newX, newY);
 
-                    bgWinX.setText(String.valueOf(Math.round(bgWindow.getLocation().getX())));
-                    bgWinY.setText(String.valueOf(Math.round(bgWindow.getLocation().getY())));
+                    updatingFromDrag[0] = true;
+                    bgWinX.setText(String.valueOf(newX));
+                    bgWinY.setText(String.valueOf(newY));
+                    updatingFromDrag[0] = false;
                 }
             }
         });
@@ -402,6 +428,31 @@ class SettingsWindow {
         mgdlButton.addActionListener(unitChangeListener);
         mmollButton.addActionListener(unitChangeListener);
 
+        JButton defaultSettings = new JButton("Reset");
+        defaultSettings.setBackground(new Color(25, 25, 25));
+        defaultSettings.setForeground(Color.WHITE);
+        defaultSettings.setBounds(10, 340, 80, 30);
+        defaultSettings.setFocusable(false);
+        defaultSettings.setBorder(new EmptyBorder(0, 4, 0, 4));
+        frame.getContentPane().add(defaultSettings);
+
+        defaultSettings.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                nsurlFeild.setText("");
+                useHttpCheckbox.setSelected(false);
+                apiSecretFeild.setText("");
+                veryHighBgFeild.setText("16.0");
+                highBgFeild.setText("10.0");
+                lowBgFeild.setText("3.9");
+                veryLowBgFeild.setText("2.0");
+                checkInterval.setText("1");
+                mmollButton.setSelected(true);
+                currentIsMgdl[0] = false;
+                bgWinX.setText("900");
+                bgWinY.setText("500");
+            }
+        });
+
         Border noBorder = new EmptyBorder(0, 0, 0, 0);
 
         JButton saveSettings = new JButton("✓");
@@ -441,6 +492,11 @@ class SettingsWindow {
                 Settings settings = new Settings();
 
                 if (settings.write(settingsList)) {
+                    if (dragging) {
+                        dragging = false;
+                        bgWindow.setBackground(new Color(0, true));
+                    }
+
                     Main.statusLabel = null;
                     frame.dispose();
 

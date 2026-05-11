@@ -65,16 +65,16 @@ class Settings {
         File settingsFile = new File("./data/.settings");
 
         String settingsJoined =
-        "veryHighBg=288.0" +
-        "\nhighBg=180.0" + 
-        "\nlowBg=70.0" +
-        "\nveryLowBg=36.0" +
+        "veryHighBg=16.0" +
+        "\nhighBg=10.0" + 
+        "\nlowBg=3.9" +
+        "\nveryLowBg=2.0" +
         "\ncheckInterval=1" +
-        "\nmgdl=true" +
-        "\nnsurl=NightScout URL" +
-        "\napiSecret=APISecret" +
-        "\nwinx=0" +
-        "\nwiny=0" +
+        "\nmgdl=false" +
+        "\nnsurl=" +
+        "\napiSecret=" +
+        "\nwinx=900" +
+        "\nwiny=500" +
         "\nuseHttp=false";
 
         try (FileWriter writer = new FileWriter(settingsFile)) {
