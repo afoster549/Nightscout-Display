@@ -1,4 +1,4 @@
-package src;
+package src.logic;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-class Settings {
+public class Settings {
     public Map<String, String> read() {
         File settingsFile = new File("./data/.settings");
 

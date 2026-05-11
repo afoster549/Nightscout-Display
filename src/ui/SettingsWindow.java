@@ -1,4 +1,4 @@
-package src;
+package src.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,7 +34,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-class SettingsWindow {
+import src.Main;
+import src.logic.Settings;
+
+public class SettingsWindow {
     private Map<String, String> settingsList;
     private JFrame bgWindow;
 
@@ -135,7 +138,7 @@ class SettingsWindow {
         }
         frame.getContentPane().add(useHttpCheckbox);
 
-        JTextField nsurlFeild = textFeildFactory.create("Nightscout URL", 10, 60, 140, 20);
+        JTextField nsurlFeild = TextFeildFactory.create("Nightscout URL", 10, 60, 140, 20);
         nsurlFeild.setText(settingsList.get("nsurl"));
         frame.getContentPane().add(nsurlFeild);
 
@@ -144,7 +147,7 @@ class SettingsWindow {
         apiSecretLabel.setBounds(10, 90, 140, 20);
         frame.getContentPane().add(apiSecretLabel);
         
-        JPasswordField apiSecretFeild = textFeildFactory.createPassword("API_SECRET", 10, 110, 140, 20);
+        JPasswordField apiSecretFeild = TextFeildFactory.createPassword("API_SECRET", 10, 110, 140, 20);
         apiSecretFeild.setText(settingsList.get("apiSecret"));
         frame.getContentPane().add(apiSecretFeild);
 
@@ -170,7 +173,7 @@ class SettingsWindow {
         veryHighBgLabel.setBounds(160, 40, 140, 20);
         frame.getContentPane().add(veryHighBgLabel);
         
-        JTextField veryHighBgFeild = textFeildFactory.create("Very High BG", 160, 60, 140, 20);
+        JTextField veryHighBgFeild = TextFeildFactory.create("Very High BG", 160, 60, 140, 20);
         veryHighBgFeild.setText(settingsList.get("veryHighBg"));
         veryHighBgFeild.addKeyListener(bgFieldKeyListener);
         frame.getContentPane().add(veryHighBgFeild);
@@ -180,7 +183,7 @@ class SettingsWindow {
         highBgLabel.setBounds(160, 90, 140, 20);
         frame.getContentPane().add(highBgLabel);
         
-        JTextField highBgFeild = textFeildFactory.create("High BG", 160, 110, 140, 20);
+        JTextField highBgFeild = TextFeildFactory.create("High BG", 160, 110, 140, 20);
         highBgFeild.setText(settingsList.get("highBg"));
         highBgFeild.addKeyListener(bgFieldKeyListener);
         frame.getContentPane().add(highBgFeild);
@@ -190,7 +193,7 @@ class SettingsWindow {
         lowBgLabel.setBounds(160, 140, 140, 20);
         frame.getContentPane().add(lowBgLabel);
         
-        JTextField lowBgFeild = textFeildFactory.create("Low BG", 160, 160, 140, 20);
+        JTextField lowBgFeild = TextFeildFactory.create("Low BG", 160, 160, 140, 20);
         lowBgFeild.setText(settingsList.get("lowBg"));
         lowBgFeild.addKeyListener(bgFieldKeyListener);
         frame.getContentPane().add(lowBgFeild);
@@ -200,7 +203,7 @@ class SettingsWindow {
         veryLowBgLabel.setBounds(160, 190, 140, 20);
         frame.getContentPane().add(veryLowBgLabel);
         
-        JTextField veryLowBgFeild = textFeildFactory.create("Very Low BG", 160, 210, 140, 20);
+        JTextField veryLowBgFeild = TextFeildFactory.create("Very Low BG", 160, 210, 140, 20);
         veryLowBgFeild.setText(settingsList.get("veryLowBg"));
         veryLowBgFeild.addKeyListener(bgFieldKeyListener);
         frame.getContentPane().add(veryLowBgFeild);
@@ -288,7 +291,7 @@ class SettingsWindow {
         checkIntervalLabel.setBounds(10, 190, 140, 20);
         frame.getContentPane().add(checkIntervalLabel);
         
-        JTextField checkInterval = textFeildFactory.create("Check Interval (mins)", 10, 210, 140, 20);
+        JTextField checkInterval = TextFeildFactory.create("Check Interval (mins)", 10, 210, 140, 20);
         checkInterval.setText(settingsList.get("checkInterval"));
         checkInterval.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -347,7 +350,7 @@ class SettingsWindow {
         bgWinXLabel.setBounds(310, 140, 130, 20);
         frame.getContentPane().add(bgWinXLabel);
         
-        JTextField bgWinX = textFeildFactory.create("BG Window X", 310, 160, 130, 20);
+        JTextField bgWinX = TextFeildFactory.create("BG Window X", 310, 160, 130, 20);
         bgWinX.setText(settingsList.get("winx"));
         bgWinX.addKeyListener(coordKeyListener);
         frame.getContentPane().add(bgWinX);
@@ -357,7 +360,7 @@ class SettingsWindow {
         bgWinYLabel.setBounds(310, 190, 130, 20);
         frame.getContentPane().add(bgWinYLabel);
         
-        JTextField bgWinY = textFeildFactory.create("BG Window Y", 310, 210, 130, 20);
+        JTextField bgWinY = TextFeildFactory.create("BG Window Y", 310, 210, 130, 20);
         bgWinY.setText(settingsList.get("winy"));
         bgWinY.addKeyListener(coordKeyListener);
         frame.getContentPane().add(bgWinY);

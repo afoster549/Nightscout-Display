@@ -1,9 +1,9 @@
-package src;
+package src.logic;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class sha1 {
+public class Sha1 {
     public static String hash(String input) {
         try {
             MessageDigest sha1 = MessageDigest.getInstance("SHA-1");

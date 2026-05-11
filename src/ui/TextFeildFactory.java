@@ -1,4 +1,4 @@
-package src;
+package src.ui;
 
 import java.awt.Color;
 
@@ -7,7 +7,7 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
-class textFeildFactory {
+class TextFeildFactory {
     public static JTextField create(String toolTip, int x, int y, int width, int height) {
         JTextField feild = new JTextField();
 

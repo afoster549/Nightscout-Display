@@ -1,4 +1,4 @@
-package src;
+package src.logic;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -17,8 +17,10 @@ import java.util.Map;
 
 import javax.swing.JLabel;
 
-class UpdateLoop implements Runnable {
-    static sha1 sha_1 = new sha1();
+import src.Main;
+
+public class UpdateLoop implements Runnable {
+    static Sha1 sha_1 = new Sha1();
 
     private JLabel bgLabel;
     private Map<String, String> settingsList;
@@ -51,7 +53,7 @@ class UpdateLoop implements Runnable {
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
                     connection.setRequestProperty("accept", "application/json");
-                    connection.setRequestProperty("API-SECRET", sha1.hash(settingsList.get("apiSecret")));
+                    connection.setRequestProperty("API-SECRET", Sha1.hash(settingsList.get("apiSecret")));
                     responseCode = connection.getResponseCode();
                 }
             } catch (IOException error) {

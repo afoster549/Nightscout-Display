@@ -19,13 +19,17 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import src.logic.Settings;
+import src.ui.BgWindow;
+import src.ui.SettingsWindow;
+
 public class Main {
-    static Settings settings = new Settings();
-    static TrayIcon trayIcon;
-    static JLabel statusLabel;
-    static String currentStatusText = "Status: Connecting...";
-    static Color currentStatusColor = Color.WHITE;
-    static Thread updateThread;
+    public static Settings settings = new Settings();
+    public static TrayIcon trayIcon;
+    public static JLabel statusLabel;
+    public static String currentStatusText = "Status: Connecting...";
+    public static Color currentStatusColor = Color.WHITE;
+    public static Thread updateThread;
 
     public static void main(String[] args) throws InterruptedException, IOException {
         Map<String, String> settingsList = settings.read();

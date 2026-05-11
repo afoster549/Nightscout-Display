@@ -1,4 +1,4 @@
-package src;
+package src.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,7 +12,10 @@ import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
-class BgWindow {
+import src.Main;
+import src.logic.UpdateLoop;
+
+public class BgWindow {
     private Map<String, String> settingsList;
 
     public BgWindow(Map<String, String> settingsList) {
