@@ -79,10 +79,10 @@ class SettingsWindow {
         if (windowIcon != null) {
             frame.setIconImage(windowIcon);
         }
-        frame.setPreferredSize(new Dimension(400, 420));
+        frame.setPreferredSize(new Dimension(450, 320));
 
-        int x = ((dim.width - frame.getSize().width) / 2) - 200;
-        int y = ((dim.height - frame.getSize().height) / 2) - 210;
+        int x = ((dim.width - frame.getSize().width) / 2) - 225;
+        int y = ((dim.height - frame.getSize().height) / 2) - 160;
 
         frame.setLocation(x, y);
         frame.setUndecorated(true);
@@ -104,29 +104,29 @@ class SettingsWindow {
         Main.statusLabel.setBackground(new Color(17, 17, 17));
         Main.statusLabel.setForeground(Main.currentStatusColor);
         Main.statusLabel.setFont(new Font("Ubuntu", Font.PLAIN, 14));
-        Main.statusLabel.setBounds(240, 10, 150, 20);
+        Main.statusLabel.setBounds(300, 10, 150, 20);
         frame.getContentPane().add(Main.statusLabel);
 
         JLabel errorMessage = new JLabel("");
         errorMessage.setBackground(new Color(17, 17, 17));
         errorMessage.setForeground(Color.RED);
         errorMessage.setFont(new Font("Ubuntu", Font.PLAIN, 20));
-        errorMessage.setBounds(100, 382, 210, 24);
+        errorMessage.setBounds(100, 282, 260, 24);
 
         frame.getContentPane().add(errorMessage);
 
         JLabel nsurlLabel = new JLabel("Nightscout URL");
         nsurlLabel.setForeground(Color.WHITE);
-        nsurlLabel.setBounds(10, 40, 150, 20);
+        nsurlLabel.setBounds(10, 40, 140, 20);
         frame.getContentPane().add(nsurlLabel);
         
         JLabel useHttpLabel = new JLabel("Protocol");
         useHttpLabel.setForeground(Color.WHITE);
-        useHttpLabel.setBounds(240, 40, 150, 20);
+        useHttpLabel.setBounds(10, 140, 140, 20);
         frame.getContentPane().add(useHttpLabel);
 
         JCheckBox useHttpCheckbox = new JCheckBox("Use HTTP");
-        useHttpCheckbox.setBounds(240, 60, 150, 20);
+        useHttpCheckbox.setBounds(10, 160, 140, 20);
         useHttpCheckbox.setBackground(new Color(17, 17, 17));
         useHttpCheckbox.setForeground(Color.WHITE);
         useHttpCheckbox.setFocusable(false);
@@ -135,31 +135,38 @@ class SettingsWindow {
         }
         frame.getContentPane().add(useHttpCheckbox);
 
-        JTextField nsurlFeild = textFeildFactory.create("Nightscout URL", 10, 60, 150, 20);
+        JTextField nsurlFeild = textFeildFactory.create("Nightscout URL", 10, 60, 140, 20);
         nsurlFeild.setText(settingsList.get("nsurl"));
         frame.getContentPane().add(nsurlFeild);
 
         JLabel apiSecretLabel = new JLabel("API Secret");
         apiSecretLabel.setForeground(Color.WHITE);
-        apiSecretLabel.setBounds(10, 90, 150, 20);
+        apiSecretLabel.setBounds(10, 90, 140, 20);
         frame.getContentPane().add(apiSecretLabel);
         
-        JPasswordField apiSecretFeild = textFeildFactory.createPassword("API_SECRET", 10, 110, 150, 20);
+        JPasswordField apiSecretFeild = textFeildFactory.createPassword("API_SECRET", 10, 110, 140, 20);
         apiSecretFeild.setText(settingsList.get("apiSecret"));
         frame.getContentPane().add(apiSecretFeild);
 
         JLabel veryHighBgLabel = new JLabel("Very High BG");
         veryHighBgLabel.setForeground(Color.WHITE);
-        veryHighBgLabel.setBounds(10, 140, 150, 20);
+        veryHighBgLabel.setBounds(160, 40, 140, 20);
         frame.getContentPane().add(veryHighBgLabel);
         
-        JTextField veryHighBgFeild = textFeildFactory.create("Very High BG", 10, 160, 150, 20);
+        JTextField veryHighBgFeild = textFeildFactory.create("Very High BG", 160, 60, 140, 20);
         veryHighBgFeild.setText(settingsList.get("veryHighBg"));
         veryHighBgFeild.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (!Character.isDigit(c) && c != '.') {
                     e.consume();
+                } else if (c == '.' && veryHighBgFeild.getText().contains(".")) {
+                    e.consume();
+                } else if (Character.isDigit(c) && veryHighBgFeild.getText().contains(".")) {
+                    int dotIndex = veryHighBgFeild.getText().indexOf(".");
+                    if (veryHighBgFeild.getText().length() - dotIndex > 1 && veryHighBgFeild.getCaretPosition() > dotIndex && veryHighBgFeild.getSelectedText() == null) {
+                        e.consume();
+                    }
                 }
             }
         });
@@ -167,16 +174,23 @@ class SettingsWindow {
 
         JLabel highBgLabel = new JLabel("High BG");
         highBgLabel.setForeground(Color.WHITE);
-        highBgLabel.setBounds(10, 190, 150, 20);
+        highBgLabel.setBounds(160, 90, 140, 20);
         frame.getContentPane().add(highBgLabel);
         
-        JTextField highBgFeild = textFeildFactory.create("High BG", 10, 210, 150, 20);
+        JTextField highBgFeild = textFeildFactory.create("High BG", 160, 110, 140, 20);
         highBgFeild.setText(settingsList.get("highBg"));
         highBgFeild.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (!Character.isDigit(c) && c != '.') {
                     e.consume();
+                } else if (c == '.' && highBgFeild.getText().contains(".")) {
+                    e.consume();
+                } else if (Character.isDigit(c) && highBgFeild.getText().contains(".")) {
+                    int dotIndex = highBgFeild.getText().indexOf(".");
+                    if (highBgFeild.getText().length() - dotIndex > 1 && highBgFeild.getCaretPosition() > dotIndex && highBgFeild.getSelectedText() == null) {
+                        e.consume();
+                    }
                 }
             }
         });
@@ -184,16 +198,23 @@ class SettingsWindow {
 
         JLabel lowBgLabel = new JLabel("Low BG");
         lowBgLabel.setForeground(Color.WHITE);
-        lowBgLabel.setBounds(10, 240, 150, 20);
+        lowBgLabel.setBounds(160, 140, 140, 20);
         frame.getContentPane().add(lowBgLabel);
         
-        JTextField lowBgFeild = textFeildFactory.create("Low BG", 10, 260, 150, 20);
+        JTextField lowBgFeild = textFeildFactory.create("Low BG", 160, 160, 140, 20);
         lowBgFeild.setText(settingsList.get("lowBg"));
         lowBgFeild.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (!Character.isDigit(c) && c != '.') {
                     e.consume();
+                } else if (c == '.' && lowBgFeild.getText().contains(".")) {
+                    e.consume();
+                } else if (Character.isDigit(c) && lowBgFeild.getText().contains(".")) {
+                    int dotIndex = lowBgFeild.getText().indexOf(".");
+                    if (lowBgFeild.getText().length() - dotIndex > 1 && lowBgFeild.getCaretPosition() > dotIndex && lowBgFeild.getSelectedText() == null) {
+                        e.consume();
+                    }
                 }
             }
         });
@@ -201,27 +222,112 @@ class SettingsWindow {
 
         JLabel veryLowBgLabel = new JLabel("Very Low BG");
         veryLowBgLabel.setForeground(Color.WHITE);
-        veryLowBgLabel.setBounds(10, 290, 150, 20);
+        veryLowBgLabel.setBounds(160, 190, 140, 20);
         frame.getContentPane().add(veryLowBgLabel);
         
-        JTextField veryLowBgFeild = textFeildFactory.create("Very Low BG", 10, 310, 150, 20);
+        JTextField veryLowBgFeild = textFeildFactory.create("Very Low BG", 160, 210, 140, 20);
         veryLowBgFeild.setText(settingsList.get("veryLowBg"));
         veryLowBgFeild.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
                 if (!Character.isDigit(c) && c != '.') {
                     e.consume();
+                } else if (c == '.' && veryLowBgFeild.getText().contains(".")) {
+                    e.consume();
+                } else if (Character.isDigit(c) && veryLowBgFeild.getText().contains(".")) {
+                    int dotIndex = veryLowBgFeild.getText().indexOf(".");
+                    if (veryLowBgFeild.getText().length() - dotIndex > 1 && veryLowBgFeild.getCaretPosition() > dotIndex && veryLowBgFeild.getSelectedText() == null) {
+                        e.consume();
+                    }
                 }
             }
         });
         frame.getContentPane().add(veryLowBgFeild);
 
+        DocumentListener thresholdChangeListener = new DocumentListener() {
+            public void insertUpdate(DocumentEvent e) { updateColorAndBounds(); }
+            public void removeUpdate(DocumentEvent e) { updateColorAndBounds(); }
+            public void changedUpdate(DocumentEvent e) { updateColorAndBounds(); }
+
+            private void updateColorAndBounds() {
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    public void run() {
+                        try {
+                            double veryHigh = Double.parseDouble(veryHighBgFeild.getText());
+                            double high = Double.parseDouble(highBgFeild.getText());
+                            double low = Double.parseDouble(lowBgFeild.getText());
+                            double veryLow = Double.parseDouble(veryLowBgFeild.getText());
+
+                            if (veryHighBgFeild.hasFocus()) {
+                                if (high >= veryHigh) high = veryHigh - 0.1;
+                                if (low >= high) low = high - 0.1;
+                                if (veryLow >= low) veryLow = low - 0.1;
+                            } else if (highBgFeild.hasFocus()) {
+                                if (veryHigh <= high) veryHigh = high + 0.1;
+                                if (low >= high) low = high - 0.1;
+                                if (veryLow >= low) veryLow = low - 0.1;
+                            } else if (lowBgFeild.hasFocus()) {
+                                if (high <= low) high = low + 0.1;
+                                if (veryHigh <= high) veryHigh = high + 0.1;
+                                if (veryLow >= low) veryLow = low - 0.1;
+                            } else if (veryLowBgFeild.hasFocus()) {
+                                if (low <= veryLow) low = veryLow + 0.1;
+                                if (high <= low) high = low + 0.1;
+                                if (veryHigh <= high) veryHigh = high + 0.1;
+                            } else {
+                                if (high >= veryHigh) high = veryHigh - 0.1;
+                                if (low >= high) low = high - 0.1;
+                                if (veryLow >= low) veryLow = low - 0.1;
+
+                                if (low <= veryLow) low = veryLow + 0.1;
+                                if (high <= low) high = low + 0.1;
+                                if (veryHigh <= high) veryHigh = high + 0.1;
+                            }
+
+                            if (veryLow < 0.0) {
+                                veryLow = 0.0;
+                                if (low <= veryLow) low = veryLow + 0.1;
+                                if (high <= low) high = low + 0.1;
+                                if (veryHigh <= high) veryHigh = high + 0.1;
+                            }
+
+                            if (Math.abs(veryHigh - Double.parseDouble(veryHighBgFeild.getText())) > 0.01) veryHighBgFeild.setText(String.valueOf(Math.round(veryHigh * 10.0) / 10.0));
+                            if (Math.abs(high - Double.parseDouble(highBgFeild.getText())) > 0.01) highBgFeild.setText(String.valueOf(Math.round(high * 10.0) / 10.0));
+                            if (Math.abs(low - Double.parseDouble(lowBgFeild.getText())) > 0.01) lowBgFeild.setText(String.valueOf(Math.round(low * 10.0) / 10.0));
+                            if (Math.abs(veryLow - Double.parseDouble(veryLowBgFeild.getText())) > 0.01) veryLowBgFeild.setText(String.valueOf(Math.round(veryLow * 10.0) / 10.0));
+
+                            JLabel bgLabel = (JLabel) bgWindow.getContentPane().getComponent(0);
+                            String currentText = bgLabel.getText();
+                            if (!currentText.equals("Err") && !currentText.isEmpty()) {
+                                String numericPart = currentText.replaceAll("[^0-9.]", "");
+                                
+                                double val = Double.parseDouble(numericPart);
+
+                                if (val >= veryHigh || val <= veryLow) {
+                                    bgLabel.setForeground(Color.RED);
+                                } else if (val >= high || val <= low) {
+                                    bgLabel.setForeground(Color.YELLOW);
+                                } else {
+                                    bgLabel.setForeground(Color.GREEN);
+                                }
+                            }
+                        } catch (Exception ex) {}
+                    }
+                });
+            }
+        };
+
+        veryHighBgFeild.getDocument().addDocumentListener(thresholdChangeListener);
+        highBgFeild.getDocument().addDocumentListener(thresholdChangeListener);
+        lowBgFeild.getDocument().addDocumentListener(thresholdChangeListener);
+        veryLowBgFeild.getDocument().addDocumentListener(thresholdChangeListener);
+
         JLabel checkIntervalLabel = new JLabel("Check Interval (mins)");
         checkIntervalLabel.setForeground(Color.WHITE);
-        checkIntervalLabel.setBounds(240, 140, 150, 20);
+        checkIntervalLabel.setBounds(10, 190, 140, 20);
         frame.getContentPane().add(checkIntervalLabel);
         
-        JTextField checkInterval = textFeildFactory.create("Check Interval (mins)", 240, 160, 150, 20);
+        JTextField checkInterval = textFeildFactory.create("Check Interval (mins)", 10, 210, 140, 20);
         checkInterval.setText(settingsList.get("checkInterval"));
         checkInterval.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -234,13 +340,13 @@ class SettingsWindow {
 
         JLabel bgPositionLabel = new JLabel("BG Position");
         bgPositionLabel.setForeground(Color.WHITE);
-        bgPositionLabel.setBounds(240, 190, 150, 20);
+        bgPositionLabel.setBounds(310, 90, 130, 20);
         frame.getContentPane().add(bgPositionLabel);
 
         JButton dragBgWindow = new JButton("Drag BG window");
         dragBgWindow.setBackground(new Color(25, 25, 25));
         dragBgWindow.setForeground(Color.WHITE);
-        dragBgWindow.setBounds(240, 210, 150, 20);
+        dragBgWindow.setBounds(310, 110, 130, 20);
         dragBgWindow.setFocusable(false);
 
         Border paddingBorder = new EmptyBorder(0, 4, 0, 4);
@@ -268,10 +374,10 @@ class SettingsWindow {
 
         JLabel bgWinXLabel = new JLabel("BG Window X");
         bgWinXLabel.setForeground(Color.WHITE);
-        bgWinXLabel.setBounds(240, 240, 150, 20);
+        bgWinXLabel.setBounds(310, 140, 130, 20);
         frame.getContentPane().add(bgWinXLabel);
         
-        JTextField bgWinX = textFeildFactory.create("BG Window X", 240, 260, 150, 20);
+        JTextField bgWinX = textFeildFactory.create("BG Window X", 310, 160, 130, 20);
         bgWinX.setText(settingsList.get("winx"));
         bgWinX.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -285,10 +391,10 @@ class SettingsWindow {
 
         JLabel bgWinYLabel = new JLabel("BG Window Y");
         bgWinYLabel.setForeground(Color.WHITE);
-        bgWinYLabel.setBounds(240, 290, 150, 20);
+        bgWinYLabel.setBounds(310, 190, 130, 20);
         frame.getContentPane().add(bgWinYLabel);
         
-        JTextField bgWinY = textFeildFactory.create("BG Window Y", 240, 310, 150, 20);
+        JTextField bgWinY = textFeildFactory.create("BG Window Y", 310, 210, 130, 20);
         bgWinY.setText(settingsList.get("winy"));
         bgWinY.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
@@ -300,8 +406,8 @@ class SettingsWindow {
         });
         frame.getContentPane().add(bgWinY);
 
-        JCheckBox alignRightCheckbox = new JCheckBox("BG Align Right");
-        alignRightCheckbox.setBounds(240, 340, 150, 20);
+        JCheckBox alignRightCheckbox = new JCheckBox("Align Right");
+        alignRightCheckbox.setBounds(310, 240, 130, 20);
         alignRightCheckbox.setBackground(new Color(17, 17, 17));
         alignRightCheckbox.setForeground(Color.WHITE);
         alignRightCheckbox.setFocusable(false);
@@ -371,14 +477,14 @@ class SettingsWindow {
 
         JLabel unitLabel = new JLabel("BG Unit");
         unitLabel.setForeground(Color.WHITE);
-        unitLabel.setBounds(240, 90, 150, 20);
+        unitLabel.setBounds(310, 40, 130, 20);
         frame.getContentPane().add(unitLabel);
 
         JRadioButton mgdlButton = new JRadioButton("mg/dl");
         JRadioButton mmollButton = new JRadioButton("mmol/L");
 
-        mgdlButton.setBounds(240, 110, 70, 20);
-        mmollButton.setBounds(310, 110, 80, 20);
+        mgdlButton.setBounds(310, 60, 60, 20);
+        mmollButton.setBounds(370, 60, 70, 20);
 
         mgdlButton.setBackground(new Color(25, 25, 25));
         mgdlButton.setForeground(Color.WHITE);
@@ -456,7 +562,7 @@ class SettingsWindow {
         JButton defaultSettings = new JButton("Reset");
         defaultSettings.setBackground(new Color(25, 25, 25));
         defaultSettings.setForeground(Color.WHITE);
-        defaultSettings.setBounds(10, 380, 80, 30);
+        defaultSettings.setBounds(10, 280, 80, 30);
         defaultSettings.setFocusable(false);
         defaultSettings.setBorder(new EmptyBorder(0, 4, 0, 4));
         frame.getContentPane().add(defaultSettings);
@@ -466,6 +572,24 @@ class SettingsWindow {
                 nsurlFeild.setText("");
                 useHttpCheckbox.setSelected(false);
                 apiSecretFeild.setText("");
+
+                if (currentIsMgdl[0]) {
+                    try {
+                        JLabel bgLabel = (JLabel) bgWindow.getContentPane().getComponent(0);
+                        String currentText = bgLabel.getText();
+                        if (!currentText.equals("Err") && !currentText.isEmpty()) {
+                            String numericPart = currentText.replaceAll("[^0-9.]", "");
+                            String directionPart = currentText.replaceAll("[0-9.]", "");
+                            
+                            double val = Double.parseDouble(numericPart);
+                            val = val / 18.0;
+                            
+                            DecimalFormat df = new DecimalFormat("0.0");
+                            bgLabel.setText(df.format(val) + directionPart);
+                        }
+                    } catch (Exception e) {}
+                }
+
                 veryHighBgFeild.setText("16.0");
                 highBgFeild.setText("10.0");
                 lowBgFeild.setText("3.9");
@@ -484,7 +608,7 @@ class SettingsWindow {
         JButton saveSettings = new JButton("✓");
         saveSettings.setBackground(new Color(25, 25, 25));
         saveSettings.setForeground(Color.GREEN);
-        saveSettings.setBounds(360, 380, 30, 30);
+        saveSettings.setBounds(410, 280, 30, 30);
         saveSettings.setFocusable(false);
 
         saveSettings.setBorder(noBorder);
@@ -493,6 +617,39 @@ class SettingsWindow {
 
         saveSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
+                try {
+                    double veryHigh = Double.parseDouble(veryHighBgFeild.getText());
+                    double high = Double.parseDouble(highBgFeild.getText());
+                    double low = Double.parseDouble(lowBgFeild.getText());
+                    double veryLow = Double.parseDouble(veryLowBgFeild.getText());
+
+                    if (high >= veryHigh) high = veryHigh - 0.1;
+                    if (low >= high) low = high - 0.1;
+                    if (veryLow >= low) veryLow = low - 0.1;
+
+                    if (low <= veryLow) low = veryLow + 0.1;
+                    if (high <= low) high = low + 0.1;
+                    if (veryHigh <= high) veryHigh = high + 0.1;
+
+                    if (veryLow < 0.0) {
+                        veryLow = 0.0;
+                        if (low <= veryLow) low = veryLow + 0.1;
+                        if (high <= low) high = low + 0.1;
+                        if (veryHigh <= high) veryHigh = high + 0.1;
+                    }
+
+                    veryHighBgFeild.setText(String.valueOf(Math.round(veryHigh * 10.0) / 10.0));
+                    highBgFeild.setText(String.valueOf(Math.round(high * 10.0) / 10.0));
+                    lowBgFeild.setText(String.valueOf(Math.round(low * 10.0) / 10.0));
+                    veryLowBgFeild.setText(String.valueOf(Math.round(veryLow * 10.0) / 10.0));
+
+                    int interval = Integer.parseInt(checkInterval.getText());
+                    if (interval < 1) checkInterval.setText("1");
+                } catch (NumberFormatException ex) {
+                    errorMessage.setText("Invalid number format.");
+                    return;
+                }
+
                 boolean forceCheck = !settingsList.get("nsurl").equals(nsurlFeild.getText()) || 
                                      !settingsList.get("apiSecret").equals(new String(apiSecretFeild.getPassword())) ||
                                      !settingsList.get("checkInterval").equals(checkInterval.getText()) ||
@@ -551,7 +708,7 @@ class SettingsWindow {
         JButton discardSettings = new JButton("╳");
         discardSettings.setBackground(new Color(25, 25, 25));
         discardSettings.setForeground(Color.RED);
-        discardSettings.setBounds(320, 380, 30, 30);
+        discardSettings.setBounds(370, 280, 30, 30);
         discardSettings.setFocusable(false);
 
         discardSettings.setBorder(noBorder);
@@ -560,6 +717,12 @@ class SettingsWindow {
 
         discardSettings.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
+                boolean forceRevert = !settingsList.get("mgdl").equals(String.valueOf(mgdlButton.isSelected())) ||
+                                      !settingsList.get("veryHighBg").equals(veryHighBgFeild.getText()) ||
+                                      !settingsList.get("highBg").equals(highBgFeild.getText()) ||
+                                      !settingsList.get("lowBg").equals(lowBgFeild.getText()) ||
+                                      !settingsList.get("veryLowBg").equals(veryLowBgFeild.getText());
+
                 dragging = false;
 
                 bgWindow.setBackground(new Color(0, true));
@@ -578,6 +741,10 @@ class SettingsWindow {
                 frame.dispose();
 
                 open = false;
+
+                if (forceRevert && Main.updateThread != null) {
+                    Main.updateThread.interrupt();
+                }
             }
         });
 
