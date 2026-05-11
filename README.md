@@ -8,23 +8,25 @@ Displays the current blood sugar reading from Nightscout on your desktop.
 
 ![Screenshot of Blood Glucos Window](./images/bgwindow.png)
 
-The BG window can be placed anywhere on screen and shows the current blood glucos value along with the trend arrow. The colour is based of the range values in the settings.
+The BG window can be placed anywhere on screen and shows the current blood glucose value, the trend arrow. The colour is based of the range values in the settings.
 
 ### Settings Window
 
-![Screenshot of Settings Window](./images/settingswindow.png)
+![Screenshot of Settings Window](./images/settingsWindow.png)
 
 The settings window is accessed from the system tray.
 
 ___
 
-_From top left to bottom right_
+_Settings_
 
 __Nightscout__
 
 Nightscout URL is the link to your Nightscout server.
 <br>
-API Passkey is the API Secret for your Nightscout server.
+Protocol toggles the connection between explicitly using HTTP or the default HTTPS.
+<br>
+API Secret is the passkey for your Nightscout server (masked for security).
 
 __BG Range__
 
@@ -32,7 +34,7 @@ Very high BG value
 <br>
 High BG value
 <br>
-Low BG balue
+Low BG value
 <br>
 Very Low BG value
 
